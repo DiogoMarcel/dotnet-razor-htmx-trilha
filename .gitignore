@@ -1,0 +1,26 @@
+# Notas e anexos locais, não versionados
+99-*.md
+*.docx
+*.pdf
+
+# Local History (extensão do VS Code)
+.history/
+
+# Configuração local do Claude Code (por máquina)
+.claude/settings.local.json
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+artifacts/
+
+# Rider / JetBrains
+.idea/
+
+# Sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store

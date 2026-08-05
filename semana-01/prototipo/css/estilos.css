@@ -1,0 +1,482 @@
+/* ============================================================
+   FiscalLab — protótipo estático (Semana 1)
+   CSS puro, sem framework. Cada bloco comentado com o "porquê".
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. VARIÁVEIS (custom properties)
+   Definidas em :root (o <html>), visíveis na página inteira.
+   Trocar o tema = editar aqui, nada mais.
+   ------------------------------------------------------------ */
+:root {
+  --cor-primaria: #1b4b8f;
+  --cor-primaria-escura: #133968;
+  --cor-texto: #1f2933;
+  --cor-texto-suave: #616e7c;
+  --cor-borda: #d5dce4;
+  --cor-fundo: #f4f6f9;
+  --cor-superficie: #ffffff;
+  --cor-erro: #b42318;
+  --cor-sucesso: #067647;
+
+  --espaco-xs: 0.25rem;
+  --espaco-sm: 0.5rem;
+  --espaco-md: 1rem;
+  --espaco-lg: 1.5rem;
+  --espaco-xl: 2rem;
+
+  --raio: 6px;
+  --sombra: 0 1px 3px rgba(16, 24, 40, 0.08);
+}
+
+/* ------------------------------------------------------------
+   2. RESET
+   box-sizing: border-box em tudo — width passa a incluir
+   padding e borda. Sem isso, todo cálculo de largura mente.
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* font-family herda para a página inteira (Teoria 3, herança) */
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo);
+}
+
+/* ------------------------------------------------------------
+   3. LAYOUT GERAL — CSS GRID
+   Duas dimensões (linhas E colunas) => Grid, não Flexbox.
+   grid-template-areas desenha o layout em ASCII: legível e
+   fácil de reorganizar no @media do fim do arquivo.
+   ------------------------------------------------------------ */
+.pagina {
+  display: grid;
+  grid-template-columns: 240px 1fr;   /* menu fixo | conteúdo elástico */
+  grid-template-rows: auto 1fr;       /* cabeçalho | corpo que estica */
+  grid-template-areas:
+    "menu cabecalho"
+    "menu conteudo";
+  min-height: 100vh;                  /* ocupa pelo menos a tela toda */
+}
+
+.menu      { grid-area: menu; }
+.cabecalho { grid-area: cabecalho; }
+/* O espaçamento entre os cartões é responsabilidade do PAI, não de cada
+   filho. Uma regra aqui vale para qualquer quantidade de cartões, em
+   qualquer página — e dispensa margin/style= no elemento. */
+.conteudo  {
+  grid-area: conteudo;
+  padding: var(--espaco-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
+}
+
+/* ------------------------------------------------------------
+   4. MENU LATERAL — FLEXBOX
+   Uma dimensão (itens empilhados na vertical) => Flexbox.
+   Grid por fora, Flexbox por dentro.
+   ------------------------------------------------------------ */
+.menu {
+  display: flex;
+  flex-direction: column;   /* eixo principal passa a ser o VERTICAL */
+  background-color: var(--cor-primaria-escura);
+  color: #fff;
+  padding: var(--espaco-lg) 0;
+}
+
+.menu__marca {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 0 var(--espaco-lg) var(--espaco-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: var(--espaco-md);
+}
+
+.menu__lista {
+  list-style: none;   /* remove as bolinhas do <ul> */
+  margin: 0;
+  padding: 0;
+}
+
+.menu__link {
+  display: block;                    /* ocupa a linha toda => área de clique maior */
+  padding: 0.7rem var(--espaco-lg);
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  border-left: 3px solid transparent; /* reservado, para o item ativo não "pular" */
+}
+
+.menu__link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* Estado ativo: aplicado no HTML da página correspondente.
+   Na Semana 5 o Razor gera isso; aqui é manual, de propósito. */
+.menu__link--ativo {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-left-color: #ffffff;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Acessibilidade: foco de teclado sempre visível.
+   Nunca use `outline: none` sem colocar outro indicador. */
+.menu__link:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #f5a623;
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------
+   5. CABEÇALHO
+   Título à esquerda, usuário à direita:
+   justify-content: space-between no eixo principal (horizontal).
+   ------------------------------------------------------------ */
+.cabecalho {
+  display: flex;
+  align-items: center;              /* centraliza no eixo cruzado (vertical) */
+  justify-content: space-between;
+  gap: var(--espaco-md);
+  padding: var(--espaco-md) var(--espaco-xl);
+  background-color: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cabecalho__titulo {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.cabecalho__usuario {
+  color: var(--cor-texto-suave);
+  font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------
+   6. CARTÃO (superfície branca que envolve blocos de conteúdo)
+   ------------------------------------------------------------ */
+.cartao {
+  background-color: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: var(--espaco-lg);
+}
+
+.cartao__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-lg);
+}
+
+.cartao__titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   7. BOTÕES
+   ------------------------------------------------------------ */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  padding: 0.55rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--raio);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;   /* <button> NÃO herda a fonte sozinho */
+  cursor: pointer;
+  text-decoration: none;  /* para quando o "botão" é um <a> */
+}
+
+.botao--primario {
+  background-color: var(--cor-primaria);
+  color: #fff;
+}
+.botao--primario:hover { background-color: var(--cor-primaria-escura); }
+
+.botao--secundario {
+  background-color: var(--cor-superficie);
+  border-color: var(--cor-borda);
+  color: var(--cor-texto);
+}
+.botao--secundario:hover { background-color: var(--cor-fundo); }
+
+.botao--perigo {
+  background-color: transparent;
+  color: var(--cor-erro);
+  border-color: transparent;
+  padding: 0.35rem 0.5rem;
+}
+.botao--perigo:hover { background-color: #fdecea; }
+
+/* ------------------------------------------------------------
+   8. TABELA
+   <thead>/<tbody> separados de propósito: na Semana 8 o HTMX
+   troca SÓ o <tbody> ao filtrar/paginar.
+   ------------------------------------------------------------ */
+.tabela {
+  width: 100%;
+  border-collapse: collapse;  /* junta as bordas das células numa só linha */
+}
+
+.tabela caption {
+  text-align: left;
+  color: var(--cor-texto-suave);
+  font-size: 0.875rem;
+  padding-bottom: var(--espaco-sm);
+}
+
+.tabela th,
+.tabela td {
+  text-align: left;
+  padding: 0.7rem var(--espaco-md);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela thead th {
+  background-color: #eef2f7;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--cor-texto-suave);
+}
+
+/* Link de texto na tabela (razão social => detalhe).
+   :not(.botao) evita pegar os links estilizados como botão. */
+.tabela td a:not(.botao) {
+  color: var(--cor-primaria);
+  font-weight: 600;
+  text-decoration: none;
+}
+.tabela td a:not(.botao):hover { text-decoration: underline; }
+
+/* Zebra: seletor estrutural, sem precisar de classe em cada <tr> */
+.tabela tbody tr:nth-child(even) { background-color: #fafbfc; }
+.tabela tbody tr:hover           { background-color: #eef4fc; }
+
+/* Rodapé da tabela: total agregado, à direita e em negrito. */
+.tabela tfoot td {
+  text-align: right;
+  font-weight: 700;
+  border-bottom: none;
+}
+
+/* Números alinhados à direita e com largura fixa por dígito:
+   as vírgulas ficam alinhadas na vertical. Detalhe que separa
+   tela amadora de tela profissional em sistema fiscal. */
+.tabela .numerico {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Texto lido pelo leitor de tela, invisível na tela.
+   Não use `display: none` para isso — isso REMOVE do leitor também. */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------------------------------------
+   8b. LISTA DE DADOS (detalhe da empresa)
+   <dl> em grid de 2 colunas: rótulo à esquerda, valor à direita.
+   grid-template-columns em duas trilhas => rótulo e valor de cada
+   par ficam na MESMA linha, sem markup extra por par.
+   ------------------------------------------------------------ */
+.dados {
+  display: grid;
+  grid-template-columns: max-content 1fr;  /* rótulo justo | valor elástico */
+  gap: var(--espaco-sm) var(--espaco-lg);
+  margin: 0;
+}
+
+.dados dt {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Alinhado à ESQUERDA: alinhamento à direita só ajuda em coluna de
+   números (casa as casas decimais). Aqui é texto — à direita o valor
+   fica colado na borda e o olho tem que atravessar espaço vazio. */
+.dados dd {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------
+   9. ETIQUETAS DE SITUAÇÃO
+   ------------------------------------------------------------ */
+.etiqueta {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.etiqueta--ativa   { background-color: #e6f4ea; color: var(--cor-sucesso); }
+.etiqueta--inativa { background-color: #f0f2f5; color: var(--cor-texto-suave); }
+
+/* ------------------------------------------------------------
+   10. FORMULÁRIO
+   Grid de 12 colunas: cada campo declara quantas ocupa.
+   Isso é o que um framework CSS faz por baixo dos panos.
+   ------------------------------------------------------------ */
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--espaco-lg);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;   /* label em cima, input embaixo */
+  gap: var(--espaco-xs);
+  grid-column: span 12;     /* padrão: linha inteira */
+}
+
+/* Modificadores de largura */
+.campo--3  { grid-column: span 3; }
+.campo--4  { grid-column: span 4; }
+.campo--6  { grid-column: span 6; }
+.campo--8  { grid-column: span 8; }
+
+.campo__rotulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.campo__obrigatorio {
+  color: var(--cor-erro);
+  margin-left: 2px;
+}
+
+.campo__entrada {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  font-size: 0.95rem;
+  font-family: inherit;   /* input também não herda a fonte sozinho */
+  background-color: #fff;
+}
+
+.campo__entrada:focus {
+  border-color: var(--cor-primaria);
+}
+
+/* Estado de erro do campo: borda vermelha. Aplicada no HTML quando
+   o servidor (Semana 5) marca o campo como inválido. */
+.campo__entrada--erro {
+  border-color: var(--cor-erro);
+}
+.campo__entrada--erro:focus {
+  border-color: var(--cor-erro);
+}
+
+.campo__ajuda {
+  font-size: 0.78rem;
+  color: var(--cor-texto-suave);
+}
+
+/* Mensagem de erro. Escondida por padrão; na Semana 5 o servidor
+   decide quando mostrar. Aqui é só o estilo pronto. */
+.campo__erro {
+  font-size: 0.78rem;
+  color: var(--cor-erro);
+  font-weight: 600;
+}
+
+/* Barra de ações do formulário: Flexbox, alinhada à direita */
+.formulario__acoes {
+  grid-column: span 12;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espaco-md);
+  padding-top: var(--espaco-md);
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* ------------------------------------------------------------
+   11. BARRA DE FILTRO
+   ------------------------------------------------------------ */
+.filtro {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--espaco-md);
+  margin-bottom: var(--espaco-lg);
+  flex-wrap: wrap;          /* quebra em telas estreitas em vez de estourar */
+}
+
+.filtro .campo { flex: 1 1 200px; grid-column: auto; }
+
+/* ------------------------------------------------------------
+   12. RESPONSIVO
+   Abaixo de 768px o menu vira uma faixa no topo.
+   Layout inteiro reorganizado em 4 linhas, graças a grid-areas.
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+  .pagina {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "menu"
+      "cabecalho"
+      "conteudo";
+  }
+
+  .menu {
+    flex-direction: row;      /* eixo principal volta a ser horizontal */
+    align-items: center;
+    overflow-x: auto;
+    padding: var(--espaco-sm) var(--espaco-md);
+    gap: var(--espaco-md);
+  }
+
+  .menu__marca {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding: 0 var(--espaco-md) 0 0;
+    white-space: nowrap;
+  }
+
+  .menu__lista { display: flex; gap: var(--espaco-xs); }
+
+  .menu__link {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: var(--espaco-sm) var(--espaco-md);
+    white-space: nowrap;
+  }
+
+  .menu__link--ativo { border-left: none; border-bottom-color: #fff; }
+
+  .conteudo { padding: var(--espaco-md); }
+
+  /* Campos voltam a ocupar a linha toda no celular */
+  .campo--3, .campo--4, .campo--6, .campo--8 { grid-column: span 12; }
+}

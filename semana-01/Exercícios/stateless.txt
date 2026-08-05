@@ -1,0 +1,28 @@
+Por que um servidor web "esquece" o usuário?
+Um servidor web não sabe que duas requisições vieram do mesmo usuário porque o protocolo base da web, o HTTP, é por natureza stateless (sem estado).
+
+Isso significa que cada par de "requisição-resposta" é um evento completamente isolado. Quando você clica em um link, o navegador abre uma conexão, pede o recurso, o servidor devolve a página e imediatamente "esquece" aquela interação. Essa arquitetura foi desenhada assim intencionalmente no início da web para economizar recursos: se o servidor tivesse que manter uma conexão ou memória ativa para cada pessoa navegando, ele travaria rapidamente devido ao consumo de memória.
+
+3 Formas de Resolver Isso (Gerenciamento de Estado)
+Para contornar essa "amnésia", desenvolvedores criaram formas de passar uma "identidade" a cada requisição. Eis as três principais, com seus prós e contras (trade-offs):
+
+1. Cookies
+O servidor envia um pequeno pedaço de texto (cookie) na primeira resposta. O navegador salva isso e, automaticamente, anexa esse mesmo texto em todas as requisições futuras para aquele domínio.
+
+Vantagem: Funciona nativamente, o navegador gerencia o envio de forma automática, e podem ser protegidos contra scripts maliciosos (usando as flags HttpOnly e Secure).
+
+Trade-off (O custo): Como o cookie é enviado em toda requisição (até ao pedir uma imagem do site), se ele for muito grande, consome banda de rede desnecessária. Além disso, possuem limite de tamanho (geralmente 4KB).
+
+2. Sessões no Servidor (Server-side Sessions)
+O servidor cria um "arquivo" ou registro na sua própria memória (ou banco de dados) contendo os dados do usuário. Ele gera apenas um ID de Sessão (uma chave aleatória curtinha) e envia para o usuário (geralmente via Cookie). Quando o usuário volta, envia só o ID, e o servidor "pesca" os dados na memória.
+
+Vantagem: Muito seguro, pois os dados sensíveis (perfil, carrinho de compras) nunca saem do servidor. O limite de armazenamento é praticamente a capacidade do servidor.
+
+Trade-off (O custo): Dificulta a escalabilidade horizontal. Se o seu site crescer e você precisar de 3 servidores, o "Servidor B" não saberá a sessão que foi salva na memória do "Servidor A" (exigindo infraestrutura extra, como um banco Redis compartilhado, ou sticky sessions).
+
+3. Tokens (ex: JWT - JSON Web Tokens)
+O servidor empacota as informações do usuário (ID, nome, permissões), assina criptograficamente para garantir que não sejam adulteradas, e devolve ao cliente. O navegador salva esse token (geralmente no LocalStorage) e o desenvolvedor programa o front-end para enviar esse token no cabeçalho (Header) de cada requisição. O servidor apenas valida a assinatura matemática e sabe quem é o usuário, sem precisar guardar nada na memória.
+
+Vantagem: Perfeito para escalabilidade (arquitetura stateless). Qualquer servidor que conheça a chave criptográfica pode validar o token instantaneamente.
+
+Trade-off (O custo): Como o servidor não guarda o estado, invalidar um token antes do tempo (ex: se o usuário clicar em "Sair de todos os dispositivos") é complexo. Além disso, se salvo no LocalStorage, fica vulnerável a ataques de XSS (um script malicioso na página pode roubar o token).

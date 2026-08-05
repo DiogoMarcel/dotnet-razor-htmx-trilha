@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FiscalLab — Semana 1 — Detalhe da empresa (HTML estático)
+
+     Duas colunas de dados (rótulo à esquerda, valor à direita)
+     com CSS Grid + tabela com as últimas 5 notas fiscais dela.
+     Reaproveita .cartao, .tabela, .etiqueta. A única classe nova
+     (.dados) existe porque o layout de 2 colunas precisa de um grid.
+     ============================================================ -->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Padaria do João Ltda · FiscalLab</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <div class="pagina">
+
+    <nav class="menu" aria-label="Navegação principal">
+      <div class="menu__marca">FiscalLab</div>
+      <ul class="menu__lista">
+        <li><a class="menu__link menu__link--ativo" href="index.html" aria-current="page">Empresas</a></li>
+        <li><a class="menu__link" href="cadastro.html">Nova empresa</a></li>
+        <li><a class="menu__link" href="notas.html">Notas fiscais</a></li>
+        <li><a class="menu__link" href="#">Obrigações</a></li>
+        <li><a class="menu__link" href="#">Relatórios</a></li>
+      </ul>
+    </nav>
+
+    <header class="cabecalho">
+      <h1 class="cabecalho__titulo">Padaria do João Ltda</h1>
+      <span class="cabecalho__usuario">Diogo Marcel · Administrador</span>
+    </header>
+
+    <main class="conteudo">
+
+      <!-- ============ DADOS DA EMPRESA ============ -->
+      <section class="cartao">
+        <div class="cartao__cabecalho">
+          <h2 class="cartao__titulo">Dados cadastrais</h2>
+          <a class="botao botao--secundario" href="cadastro.html">Editar</a>
+        </div>
+
+        <!-- <dl>: lista de pares rótulo/valor. Semanticamente correto
+             para dados de descrição. O grid põe dt e dd lado a lado. -->
+        <dl class="dados">
+          <dt>Razão social</dt>          <dd>Padaria do João Ltda</dd>
+          <dt>Nome fantasia</dt>         <dd>Pão Quente</dd>
+          <dt>CNPJ</dt>                  <dd>12.345.678/0001-99</dd>
+          <dt>Inscrição estadual</dt>    <dd>110.042.318.114</dd>
+          <dt>Regime tributário</dt>     <dd>Simples Nacional</dd>
+          <dt>Endereço</dt>             <dd>Rua das Flores, 128 — Centro</dd>
+          <dt>Município / UF</dt>        <dd>São Paulo / SP</dd>
+          <dt>CEP</dt>                   <dd>01001-000</dd>
+          <dt>E-mail</dt>                <dd>contato@padariadojoao.com.br</dd>
+          <dt>Telefone</dt>             <dd>(11) 3456-7890</dd>
+          <dt>Situação</dt>             <dd><span class="etiqueta etiqueta--ativa">Ativa</span></dd>
+        </dl>
+      </section>
+
+      <!-- ============ ÚLTIMAS NOTAS ============ -->
+      <section class="cartao">
+        <div class="cartao__cabecalho">
+          <h2 class="cartao__titulo">Últimas 5 notas fiscais</h2>
+          <a class="botao botao--secundario" href="notas.html">Ver todas</a>
+        </div>
+
+        <table class="tabela">
+          <caption>5 notas mais recentes</caption>
+          <thead>
+            <tr>
+              <th scope="col">Número</th>
+              <th scope="col">Emissão</th>
+              <th scope="col">Destinatário</th>
+              <th scope="col" class="numerico">Valor (R$)</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>000.128</td>
+              <td>28/07/2026</td>
+              <td>Mercado Central Ltda</td>
+              <td class="numerico">1.240,00</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td>000.127</td>
+              <td>21/07/2026</td>
+              <td>Restaurante Sabor & Cia</td>
+              <td class="numerico">860,50</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td>000.126</td>
+              <td>15/07/2026</td>
+              <td>Hotel Aurora</td>
+              <td class="numerico">3.115,00</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td>000.125</td>
+              <td>09/07/2026</td>
+              <td>Padaria Bela Vista</td>
+              <td class="numerico">420,00</td>
+              <td><span class="etiqueta etiqueta--inativa">Cancelada</span></td>
+            </tr>
+            <tr>
+              <td>000.124</td>
+              <td>02/07/2026</td>
+              <td>Cafeteria Grão Nobre</td>
+              <td class="numerico">1.980,75</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>

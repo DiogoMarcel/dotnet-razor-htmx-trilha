@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FiscalLab — Semana 1 — Notas fiscais (HTML estático)
+     Cópia enxuta do index.html: mesmo shell (menu + cabeçalho +
+     cartão), com o item "Notas fiscais" ativo no menu.
+     ============================================================ -->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas fiscais · FiscalLab</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <div class="pagina">
+
+    <nav class="menu" aria-label="Navegação principal">
+      <div class="menu__marca">FiscalLab</div>
+      <ul class="menu__lista">
+        <!-- "Empresas" agora INATIVO: sem --ativo e sem aria-current -->
+        <li><a class="menu__link" href="index.html">Empresas</a></li>
+        <li><a class="menu__link" href="cadastro.html">Nova empresa</a></li>
+        <!-- "Notas fiscais" ATIVO: classe --ativo + aria-current="page" -->
+        <li><a class="menu__link menu__link--ativo" href="notas.html" aria-current="page">Notas fiscais</a></li>
+        <li><a class="menu__link" href="#">Obrigações</a></li>
+        <li><a class="menu__link" href="#">Relatórios</a></li>
+      </ul>
+    </nav>
+
+    <header class="cabecalho">
+      <h1 class="cabecalho__titulo">Notas fiscais</h1>
+      <span class="cabecalho__usuario">Diogo Marcel · Administrador</span>
+    </header>
+
+    <main class="conteudo">
+      <section class="cartao">
+
+        <div class="cartao__cabecalho">
+          <h2 class="cartao__titulo">Notas emitidas no mês</h2>
+        </div>
+
+        <table class="tabela">
+          <caption>3 notas encontradas</caption>
+          <thead>
+            <tr>
+              <th scope="col">Número</th>
+              <th scope="col">Empresa</th>
+              <th scope="col">Emissão</th>
+              <th scope="col" class="numerico">Valor (R$)</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>000.128</td>
+              <td>Padaria do João Ltda</td>
+              <td>05/07/2026</td>
+              <td class="numerico">1.240,00</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td>001.042</td>
+              <td>Metalúrgica Silva S/A</td>
+              <td>12/07/2026</td>
+              <td class="numerico">38.910,50</td>
+              <td><span class="etiqueta etiqueta--ativa">Autorizada</span></td>
+            </tr>
+            <tr>
+              <td>000.037</td>
+              <td>Transportes Andrade ME</td>
+              <td>18/07/2026</td>
+              <td class="numerico">2.075,00</td>
+              <td><span class="etiqueta etiqueta--inativa">Cancelada</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FiscalLab — Semana 1 — Cadastro de empresa (HTML estático)
+
+     Este formulário não salva nada: não existe servidor ainda.
+     Ao enviar, o navegador vai tentar POST em /empresas/criar e
+     dará 404 — E ISSO É O EXERCÍCIO. Abra o DevTools → Network,
+     envie, e observe a requisição que o <form> gerou: método,
+     caminho, headers e o corpo com os campos.
+
+     Na Semana 5 este arquivo vira Cadastro.cshtml, os `name`
+     abaixo alimentam o model binding, e o handler OnPostAsync
+     recebe uma instância de Empresa já preenchida.
+     ============================================================ -->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova empresa · FiscalLab</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <div class="pagina">
+
+    <nav class="menu" aria-label="Navegação principal">
+      <div class="menu__marca">FiscalLab</div>
+      <ul class="menu__lista">
+        <li><a class="menu__link" href="index.html">Empresas</a></li>
+        <li><a class="menu__link menu__link--ativo" href="cadastro.html" aria-current="page">Nova empresa</a></li>
+        <li><a class="menu__link" href="notas.html">Notas fiscais</a></li>
+        <li><a class="menu__link" href="#">Obrigações</a></li>
+        <li><a class="menu__link" href="#">Relatórios</a></li>
+      </ul>
+    </nav>
+
+    <header class="cabecalho">
+      <h1 class="cabecalho__titulo">Nova empresa</h1>
+      <span class="cabecalho__usuario">Diogo Marcel · Administrador</span>
+    </header>
+
+    <main class="conteudo">
+      <section class="cartao">
+
+        <!-- ============ FORMULÁRIO ============
+             action = para onde vai   |   method="post" porque ALTERA dados.
+
+             Por que POST e não GET aqui:
+               1. GET colocaria o CNPJ e o e-mail na URL (histórico, logs do
+                  servidor, referer). Dado cadastral não vai em query string.
+               2. GET deve ser "seguro" (não altera nada). Cadastrar altera.
+               3. URL tem limite de tamanho; corpo de POST, na prática, não.
+
+             Se houvesse upload de arquivo (XML da NF-e), acrescentaria
+             enctype="multipart/form-data". -->
+        <form class="formulario" action="/empresas/criar" method="post">
+
+          <!-- Campo hidden: invisível na tela, MAS ENVIADO ao servidor.
+               É exatamente a "terceira forma de simular estado" da Teoria 1:
+               o servidor não lembra qual registro está sendo editado, então
+               o próprio HTML carrega essa informação de volta a cada envio.
+               Vazio = criação; preenchido = edição. -->
+          <input type="hidden" name="id" value="">
+
+          <!-- ---------- Identificação ---------- -->
+
+          <!-- .campo--8 => ocupa 8 das 12 colunas do grid do formulário -->
+          <div class="campo campo--8">
+            <!-- for="razaoSocial" aponta para o id do input:
+                 clicar no texto foca o campo e o leitor de tela anuncia o rótulo. -->
+            <label class="campo__rotulo" for="razaoSocial">
+              Razão social <span class="campo__obrigatorio" aria-hidden="true">*</span>
+            </label>
+            <!-- name="razaoSocial"  -> chave que chega ao servidor
+                 id="razaoSocial"    -> identificador na página (label/CSS/JS)
+                 maxlength           -> limite no cliente; o servidor REVALIDA -->
+            <input class="campo__entrada" type="text"
+                   id="razaoSocial" name="razaoSocial"
+                   maxlength="120" required
+                   autocomplete="organization">
+            <span class="campo__ajuda">Como consta no cartão CNPJ.</span>
+          </div>
+
+          <div class="campo campo--4">
+            <label class="campo__rotulo" for="cnpj">
+              CNPJ <span class="campo__obrigatorio" aria-hidden="true">*</span>
+            </label>
+            <!-- inputmode="numeric" => teclado numérico no celular, sem impedir
+                 colar texto formatado.
+                 pattern => validação de FORMATO no navegador. NÃO valida o
+                 dígito verificador — isso é regra de negócio e fica no servidor
+                 (você escreve na Semana 2). -->
+            <input class="campo__entrada campo__entrada--erro" type="text"
+                   id="cnpj" name="cnpj"
+                   inputmode="numeric"
+                   pattern="\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2}"
+                   placeholder="00.000.000/0000-00" required
+                   aria-invalid="true"
+                   aria-describedby="ajuda-cnpj erro-cnpj">
+            <!-- A classe --erro pinta a borda de vermelho: isso é para quem
+                 ENXERGA. Para o leitor de tela quem faz o trabalho é o par:
+                 aria-invalid="true"  => anuncia o campo como "inválido";
+                 aria-describedby     => aceita LISTA separada por espaço, então
+                                         lê a ajuda E a mensagem de erro.
+                 Sem os dois, o campo continua "válido e sem erro" no leitor.
+                 Na Semana 8 o HTMX devolve este fragmento no blur do campo —
+                 e o HTML gerado no servidor precisa destes mesmos atributos. -->
+            <span class="campo__ajuda" id="ajuda-cnpj">Somente números ou com pontuação.</span>
+            <!-- Estado de erro: na Semana 5 quem decide exibir é o servidor. -->
+            <span class="campo__erro" id="erro-cnpj">CNPJ inválido.</span>
+          </div>
+
+          <div class="campo campo--6">
+            <label class="campo__rotulo" for="nomeFantasia">Nome fantasia</label>
+            <input class="campo__entrada" type="text"
+                   id="nomeFantasia" name="nomeFantasia" maxlength="120">
+          </div>
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="inscricaoEstadual">Inscrição estadual</label>
+            <input class="campo__entrada" type="text"
+                   id="inscricaoEstadual" name="inscricaoEstadual" maxlength="20">
+          </div>
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="regimeTributario">
+              Regime tributário <span class="campo__obrigatorio" aria-hidden="true">*</span>
+            </label>
+            <select class="campo__entrada" id="regimeTributario" name="regimeTributario" required>
+              <option value="">Selecione…</option>
+              <option value="1">Simples Nacional</option>
+              <option value="2">Lucro Presumido</option>
+              <option value="3">Lucro Real</option>
+            </select>
+          </div>
+
+          <!-- ---------- Endereço ----------
+               Na Semana 6 este bloco inteiro vira a Partial View
+               _BlocoEndereco: é HTML repetido que recebe dados prontos
+               da página — critério exato de Partial View. -->
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="cep">CEP</label>
+            <input class="campo__entrada" type="text"
+                   id="cep" name="cep" inputmode="numeric"
+                   placeholder="00000-000" maxlength="9"
+                   autocomplete="postal-code">
+          </div>
+
+          <div class="campo campo--6">
+            <label class="campo__rotulo" for="logradouro">Logradouro</label>
+            <input class="campo__entrada" type="text"
+                   id="logradouro" name="logradouro" maxlength="150"
+                   autocomplete="street-address">
+          </div>
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="numero">Número</label>
+            <input class="campo__entrada" type="text" id="numero" name="numero" maxlength="10">
+          </div>
+
+          <div class="campo campo--6">
+            <label class="campo__rotulo" for="municipio">Município</label>
+            <input class="campo__entrada" type="text" id="municipio" name="municipio" maxlength="100">
+          </div>
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="ufEmpresa">
+              UF <span class="campo__obrigatorio" aria-hidden="true">*</span>
+            </label>
+            <select class="campo__entrada" id="ufEmpresa" name="uf" required>
+              <option value="">—</option>
+              <option value="MG">MG</option>
+              <option value="PR">PR</option>
+              <option value="RS">RS</option>
+              <option value="SC">SC</option>
+              <option value="SP">SP</option>
+            </select>
+          </div>
+
+          <!-- ---------- Contato ---------- -->
+
+          <div class="campo campo--6">
+            <label class="campo__rotulo" for="email">E-mail</label>
+            <!-- type="email" faz o navegador checar o formato e trocar
+                 o teclado do celular. Não garante que o e-mail exista. -->
+            <input class="campo__entrada" type="email"
+                   id="email" name="email" maxlength="120"
+                   autocomplete="email">
+          </div>
+
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="telefone">Telefone</label>
+            <input class="campo__entrada" type="tel"
+                   id="telefone" name="telefone" maxlength="20">
+          </div>
+
+          <!-- PEGADINHA CLÁSSICA: checkbox desmarcado NÃO é enviado.
+               O servidor não recebe "ativa=false"; ele não recebe "ativa"
+               nenhum. Quem trata isso é o model binding do ASP.NET Core
+               (bool não enviado => false). Em Razor Pages, o Tag Helper
+               asp-for gera um <input type="hidden" value="false"> junto,
+               exatamente por causa disso. -->
+          <div class="campo campo--3">
+            <label class="campo__rotulo" for="ativa">Situação</label>
+            <label>
+              <input type="checkbox" id="ativa" name="ativa" value="true" checked>
+              Empresa ativa
+            </label>
+            <input type="hidden" name="ativa" value="false">
+          </div>
+
+          <!-- ---------- Ações ---------- -->
+          <div class="formulario__acoes">
+            <a class="botao botao--secundario" href="index.html">Cancelar</a>
+            <!-- type="submit" explícito: é o que dispara a requisição HTTP -->
+            <button class="botao botao--primario" type="submit">Salvar empresa</button>
+          </div>
+
+        </form>
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>

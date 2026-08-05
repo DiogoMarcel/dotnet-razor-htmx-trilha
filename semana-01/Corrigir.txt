@@ -1,0 +1,25 @@
+Corrigir
+
+1. Estilo inline no detalhe.html (linha 64):
+
+
+<section class="cartao" style="margin-top: 1.5rem;">
+A teoria-03 diz para nunca usar style=. Você tem dois cartões empilhados — o certo é resolver no container, não no elemento:
+
+
+.conteudo { display: flex; flex-direction: column; gap: var(--espaco-lg); }
+Uma regra, vale para qualquer quantidade de cartões, em qualquer página. Espaçamento é responsabilidade do pai, não do filho — princípio que evita metade dos problemas de layout.
+
+2. O erro do CNPJ não é anunciado. Você aplicou --erro e o <span class="campo__erro">, visualmente correto. Mas para leitor de tela o campo continua "válido e sem erro". Falta:
+
+
+<input class="campo__entrada campo__entrada--erro" ...
+       aria-invalid="true"
+       aria-describedby="ajuda-cnpj erro-cnpj">
+...
+<span class="campo__erro" id="erro-cnpj">CNPJ inválido.</span>
+aria-describedby aceita lista separada por espaço — o leitor lê ajuda e erro. E aria-invalid="true" é o que faz ele anunciar "inválido". Guarde: na Semana 8 você devolve esse fragmento por HTMX no blur do campo, e vai precisar exatamente destes dois atributos no HTML gerado.
+
+3. .dados dd { text-align: right } — os valores ficam colados na borda direita, longe do rótulo, com o olho tendo que atravessar espaço vazio. Alinhamento à direita só ajuda em coluna de números, para casar as casas decimais. Aqui é texto: alinhe à esquerda. Compare os dois no navegador antes de decidir.
+
+4. Exercício 4 já estava pronto. CEP campo--3 + Logradouro campo--6 + Número campo--3 = 12. Era assim no meu arquivo original. Ou você conferiu e viu que já somava, ou passou batido — me diga qual, porque muda o que eu explico.

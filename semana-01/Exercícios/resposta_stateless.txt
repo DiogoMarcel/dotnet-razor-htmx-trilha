@@ -1,0 +1,13 @@
+O nome já diz, o modo é sem estado.
+Cada requisição/resposta é um evento isolado, sendo que cada evento é uma conexão diferente, esquecendo desta conexão logo em seguida.
+
+3 formas de resolver:
+1. cookies
+ - vantagem: o navegador gerencia
+ - trade-off: enviado em toda requisição, se for grande consome banda
+2. tokens
+ - vantagem: qualquer servidor pode validar o token se souber chave
+ - trade-off: servidor não guarda estado e fica difícil de saber como desconectar de dispositivos
+3. sessões no servidor
+ - vantagem: segurança, pois nada sai do servidor
+ - trade-off: dificulta escalabilidade

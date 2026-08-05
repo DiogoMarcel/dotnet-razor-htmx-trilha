@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Empresa</title>
+    <style>
+        /* Reset básico e tipografia */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Flexbox no Body para centralizar o formulário na tela */
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container do formulário também usa Flexbox */
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* Espaçamento entre o título e o formulário */
+        }
+
+        .form-container h2 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        /* O formulário em si usando Flexbox em coluna */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px; /* Espaçamento uniforme entre os campos */
+        }
+
+        /* Cada grupo (label + input) em Flexbox */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .form-group input, 
+        .form-group select {
+            padding: 12px 14px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #2d3748;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+            outline: none;
+        }
+
+        /* Estilização do botão */
+        .btn-submit {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Cadastro de Empresa</h2>
+        
+        <!-- O formulário aponta para httpbin.org, um serviço de testes que ecoa a requisição, 
+             permitindo ver o POST real no DevTools e o resultado na tela. -->
+        <form action="https://httpbin.org/post" method="POST">
+            <div class="form-group">
+                <label for="razao_social">Razão Social</label>
+                <input type="text" id="razao_social" name="razao_social" required placeholder="Digite a razão social da empresa">
+            </div>
+
+            <div class="form-group">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" id="cnpj" name="cnpj" required placeholder="00.000.000/0000-00">
+            </div>
+
+            <div class="form-group">
+                <label for="uf">UF</label>
+                <select id="uf" name="uf" required>
+                    <option value="" disabled selected>Selecione o estado</option>
+                    <option value="PR">Paraná (PR)</option>
+                    <option value="SP">São Paulo (SP)</option>
+                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                    <option value="MG">Minas Gerais (MG)</option>
+                    <option value="SC">Santa Catarina (SC)</option>
+                    <option value="RS">Rio Grande do Sul (RS)</option>
+                    <!-- Simplificado para o exemplo -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail Corporativo</label>
+                <input type="email" id="email" name="email" required placeholder="contato@empresa.com.br">
+            </div>
+
+            <button type="submit" class="btn-submit">Finalizar Cadastro</button>
+            <button type="button" class="btn-submit">Limpar</button>
+
+        </form>
+    </div>
+
+</body>
+</html>

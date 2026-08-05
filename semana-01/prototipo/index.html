@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     FiscalLab — Semana 1 — Listagem de empresas (HTML estático)
+
+     Ainda não existe servidor. Os dados abaixo estão escritos à mão
+     no HTML de propósito: na Semana 5 este arquivo vira uma página
+     Razor e o @foreach gera essas linhas a partir do banco.
+     ============================================================ -->
+<html lang="pt-BR">
+<head>
+  <!-- UTF-8 antes de qualquer texto, senão acentos quebram -->
+  <meta charset="UTF-8">
+  <!-- sem esta linha o celular renderiza a 980px e encolhe tudo -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas · FiscalLab</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- .pagina é o grid de 2 colunas x 2 linhas (ver CSS, bloco 3) -->
+  <div class="pagina">
+
+    <!-- ============ MENU LATERAL ============
+         <nav> em vez de <div>: leitor de tela oferece
+         "pular para a navegação". Semântica não é enfeite. -->
+    <nav class="menu" aria-label="Navegação principal">
+      <div class="menu__marca">FiscalLab</div>
+
+      <!-- Menu é uma LISTA de links. O CSS tira as bolinhas. -->
+      <ul class="menu__lista">
+        <li>
+          <!-- aria-current="page" diz ao leitor de tela qual é a página atual;
+               a classe --ativo cuida da parte visual. Os dois são necessários. -->
+          <a class="menu__link menu__link--ativo" href="index.html" aria-current="page">Empresas</a>
+        </li>
+        <li><a class="menu__link" href="cadastro.html">Nova empresa</a></li>
+        <li><a class="menu__link" href="notas.html">Notas fiscais</a></li>
+        <li><a class="menu__link" href="#">Obrigações</a></li>
+        <li><a class="menu__link" href="#">Relatórios</a></li>
+      </ul>
+    </nav>
+
+    <!-- ============ CABEÇALHO ============ -->
+    <header class="cabecalho">
+      <h1 class="cabecalho__titulo">Empresas</h1>
+      <span class="cabecalho__usuario">Diogo Marcel · Administrador</span>
+    </header>
+
+    <!-- ============ CONTEÚDO ============
+         <main>: um único por página. É o alvo do "pular para o conteúdo". -->
+    <main class="conteudo">
+
+      <section class="cartao">
+
+        <div class="cartao__cabecalho">
+          <h2 class="cartao__titulo">Empresas cadastradas</h2>
+          <!-- Link estilizado de botão. Navegar = <a>. Só use <button>
+               quando a ação NÃO é ir para outra URL. -->
+          <a class="botao botao--primario" href="cadastro.html">+ Nova empresa</a>
+        </div>
+
+        <!-- ============ FILTRO ============
+             method="get": filtro NÃO altera nada no servidor, então é GET.
+             Consequência prática: os critérios vão na query string
+             (?termo=padaria&uf=SP), a URL fica compartilhável e o F5
+             não reenvia nada. Formulário que ALTERA dados usa POST.
+             Na Semana 8 este mesmo form ganha hx-get e troca só o <tbody>. -->
+        <form class="filtro" action="index.html" method="get">
+          <div class="campo">
+            <label class="campo__rotulo" for="termo">Buscar</label>
+            <input class="campo__entrada" type="search" id="termo" name="termo"
+                   placeholder="Razão social ou CNPJ">
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="uf">UF</label>
+            <select class="campo__entrada" id="uf" name="uf">
+              <!-- value="" = "sem filtro". O texto é para o humano,
+                   o value é o que chega ao servidor. -->
+              <option value="">Todas</option>
+              <option value="SP">São Paulo</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PR">Paraná</option>
+              <option value="RS">Rio Grande do Sul</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="situacao">Situação</label>
+            <select class="campo__entrada" id="situacao" name="situacao">
+              <option value="">Todas</option>
+              <option value="ativa">Ativa</option>
+              <option value="inativa">Inativa</option>
+            </select>
+          </div>
+
+          <button class="botao botao--secundario" type="submit">Filtrar</button>
+        </form>
+
+        <!-- ============ TABELA ============
+             Dado tabular => <table>. (Layout de página => Grid, nunca table.) -->
+        <table class="tabela">
+          <caption>4 empresas encontradas</caption>
+
+          <!-- scope="col" informa ao leitor de tela que o <th> rotula a COLUNA -->
+          <thead>
+            <tr>
+              <th scope="col">Razão social</th>
+              <th scope="col">CNPJ</th>
+              <th scope="col">UF</th>
+              <th scope="col">Regime tributário</th>
+              <th scope="col" class="numerico">Notas no mês</th>
+              <th scope="col">Situação</th>
+              <th scope="col"><span class="visualmente-oculto">Ações</span></th>
+            </tr>
+          </thead>
+
+          <!-- ATENÇÃO: este <tbody> é o alvo do HTMX na Semana 8.
+               hx-target="#lista-empresas" hx-swap="innerHTML" vai
+               substituir exatamente estas linhas, sem recarregar a página. -->
+          <tbody id="lista-empresas">
+            <tr>
+              <td><a href="detalhe.html">Padaria do João Ltda</a></td>
+              <td>12.345.678/0001-99</td>
+              <td>SP</td>
+              <td>Simples Nacional</td>
+              <td class="numerico">128</td>
+              <td><span class="etiqueta etiqueta--ativa">Ativa</span></td>
+              <td>
+                <a class="botao botao--secundario" href="cadastro.html">Editar</a>
+                <!-- type="button" é obrigatório: dentro de um <form>, um
+                     <button> sem type vira submit. Fora dele não faz mal,
+                     mas o hábito evita o bug clássico. -->
+                <button class="botao botao--perigo" type="button">Excluir</button>
+              </td>
+            </tr>
+            <tr>
+              <td><a href="detalhe.html">Metalúrgica Silva S/A</a></td>
+              <td>98.765.432/0001-10</td>
+              <td>MG</td>
+              <td>Lucro Real</td>
+              <td class="numerico">1.042</td>
+              <td><span class="etiqueta etiqueta--ativa">Ativa</span></td>
+              <td>
+                <a class="botao botao--secundario" href="cadastro.html">Editar</a>
+                <button class="botao botao--perigo" type="button">Excluir</button>
+              </td>
+            </tr>
+            <tr>
+              <td><a href="detalhe.html">Transportes Andrade ME</a></td>
+              <td>45.612.378/0001-05</td>
+              <td>PR</td>
+              <td>Simples Nacional</td>
+              <td class="numerico">37</td>
+              <td><span class="etiqueta etiqueta--inativa">Inativa</span></td>
+              <td>
+                <a class="botao botao--secundario" href="cadastro.html">Editar</a>
+                <button class="botao botao--perigo" type="button">Excluir</button>
+              </td>
+            </tr>
+            <tr>
+              <td><a href="detalhe.html">Comércio de Tintas Boreal Ltda</a></td>
+              <td>33.221.144/0001-77</td>
+              <td>RS</td>
+              <td>Lucro Presumido</td>
+              <td class="numerico">6</td>
+              <td><span class="etiqueta etiqueta--ativa">Ativa</span></td>
+              <td>
+                <a class="botao botao--secundario" href="cadastro.html">Editar</a>
+                <button class="botao botao--perigo" type="button">Excluir</button>
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- Total agregado da coluna "Notas no mês".
+               colspan="4" pula Razão/CNPJ/UF/Regime; a célula com a soma
+               fica sob "Notas no mês"; colspan="2" cobre Situação/Ações. -->
+          <tfoot>
+            <tr>
+              <td colspan="4">Total</td>
+              <td class="numerico">1.213</td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>
