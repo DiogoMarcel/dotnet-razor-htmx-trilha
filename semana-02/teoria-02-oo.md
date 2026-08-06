@@ -237,6 +237,38 @@ Convenção: nome de interface começa com **`I`** — igual ao Delphi.
 
 **Por que isso importa já:** a partir da Semana 4, o ASP.NET Core injeta dependências **por interface**. Você registra `ICnpjService` e recebe a implementação pronta. E em teste (Semana 11), troca a implementação real por uma falsa sem tocar no código testado. Interface não é enfeite acadêmico — é o que torna o resto possível.
 
+### 5.1 Vindo do Delphi: o que muda (e por que você pode usar à vontade)
+
+O nome é igual, a palavra-chave é igual, a convenção `I` é igual. O que está por baixo, não. Três coisas que você aprendeu a temer no Delphi **não existem em C#**:
+
+| | Delphi | C# |
+|---|---|---|
+| Tempo de vida | descende de `IInterface` → `_AddRef`/`_Release`. Misturar `Free` com referência de interface = double free ou vazamento | GC. Referência de interface é uma referência comum. Nada a gerenciar |
+| Ancestral | toda interface herda de `IInterface` | interface não herda de nada |
+| GUID | obrigatório para `Supports` / `as` | não existe. `is` e `as` funcionam direto. GUID só em interop COM |
+| Custo por objeto | **um ponteiro escondido por instância, por interface implementada** (4 bytes x86 / 8 x64) | zero. O mapa de interfaces vive no tipo, não na instância. O objeto tem o mesmo header implementando 0 ou 40 interfaces |
+| Limite de empacotamento | tabela de export do formato PE: **65.535 símbolos por BPL/DLL**. Package grande estoura e precisa ser quebrada | não se aplica. Tipos são resolvidos por metadados, não pela export table do PE |
+
+Aquele limite de 65.535 é do Windows, não do Delphi — e é a origem do conselho "não abusa de interface". Ele é real, mas o gatilho é o **tamanho da package**, não a interface em si. Em .NET o mecanismo é outro: o assembly carrega uma tabela de metadados com teto na casa dos milhões de linhas. Não é um limite que você alcança escrevendo código.
+
+Sobra só o custo de despacho: chamar método por interface é um pouco mais caro que chamada virtual (o runtime usa um stub com cache). Ordem de nanossegundo. Num app web, a consulta ao banco custa dez mil vezes mais. Não é critério de decisão.
+
+**Consequência:** em C#, o único critério para criar uma interface é **design** — acoplamento e testabilidade. Nunca orçamento de recurso. Se você se pegar contando interfaces, está resolvendo um problema que a plataforma não tem.
+
+### 5.2 Assembly não é BPL
+
+Os dois são `.dll`. O comportamento é bem diferente, e isso muda como você organiza o projeto.
+
+| | BPL (Delphi) | Assembly (.NET) |
+|---|---|---|
+| Compilador | package do Delphi 11 não carrega no 12 | o contrato é o IL. Biblioteca compilada com C# 10 roda em app C# 14 sem recompilar |
+| Memória | compartilha RTL e memory manager — é por isso que passar `string` ou `TObject` por DLL comum quebra, e por isso a package existe | um GC, um heap. Passar `List<Empresa>` entre assemblies é trivial |
+| Opcional? | escolha de build (*runtime packages* liga/desliga) | não é opcional. Todo projeto .NET **é** um assembly |
+| Resolução | PATH e diretório do executável | `deps.json` + NuGet. Duas versões da mesma biblioteca podem coexistir no processo em `AssemblyLoadContext` diferentes — impossível com BPL |
+| Fronteira de visibilidade | o que a package exporta | o modificador `internal`, verificado pelo **compilador** |
+
+Na Semana 4 o FiscalLab vira três assemblies: `FiscalLab.Domain`, `FiscalLab.Data`, `FiscalLab.Web`. `Domain` não referencia `Web` — e o compilador impede. É a mesma disciplina de dependência entre packages, sem a fragilidade de versão e sem a export table.
+
 ---
 
 ## 6. Herança
@@ -324,6 +356,8 @@ Em .NET moderno, `ImplicitUsings` já traz `System`, `System.Collections.Generic
 - [ ] Diferença entre `class` e `record`, e quando usar cada um
 - [ ] O que `init` faz e por que é útil em dado fiscal
 - [ ] Para que serve uma interface, com um exemplo do seu domínio
+- [ ] Por que os limites de interface que valem no Delphi não valem em C#
+- [ ] Uma diferença prática entre assembly .NET e BPL do Delphi
 - [ ] Diferença entre `abstract` e `virtual`
 - [ ] Por que campo `static` é perigoso em servidor web
 - [ ] Por que validar no construtor

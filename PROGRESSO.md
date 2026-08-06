@@ -3,7 +3,7 @@
 > **Este arquivo é o estado do estudo.** Cowork e Claude Code leem daqui antes de responder qualquer coisa, e escrevem aqui ao fim de cada sessão. Se este arquivo estiver desatualizado, as duas ferramentas dão conselho errado.
 
 **Aluno:** Diogo Marcel · **Início:** 26/07/2026 · **Ritmo alvo:** 10–15h/semana
-**Última atualização:** 04/08/2026
+**Última atualização:** 05/08/2026
 
 ---
 
@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Semana ativa** | 02 — C# fundamentos (parte 1) |
+| **Semana ativa** | 02 — C# fundamentos (parte 1) · **no projeto** (`projeto/GUIA-PROJETO.md`) |
 | **Fase** | 1 — Fundação (semanas 1–4) |
 | **Bloqueio** | Nenhum reportado |
 | **Pendência aberta** | Correções da Semana 1 (`semana-01/Corrigir.txt`) — **não confirmadas como aplicadas** |
@@ -46,16 +46,20 @@
 
 | # | Arquivo | Tempo | Status |
 |---|---|---|---|
-| 0 | Instalar SDK .NET 10 (`winget install Microsoft.DotNet.SDK.10`) | 15min | ❓ |
-| 1 | `teoria-01-tipos.md` | 2h | ❓ |
-| 2 | `teoria-02-oo.md` | 2h30 | ❓ |
-| 3 | `teoria-03-colecoes.md` | 2h | ❓ |
-| 4 | `projeto/GUIA-PROJETO.md` — FiscalLab console | 5h | ❓ |
-| 5 | Prova de conhecimento | 1h | ❓ |
+| 0 | Instalar SDK .NET 10 (`winget install Microsoft.DotNet.SDK.10`) | 15min | ✅ |
+| 1 | `teoria-01-tipos.md` | 2h | ✅ |
+| 2 | `teoria-02-oo.md` | 2h30 | ✅ |
+| 3 | `teoria-03-colecoes.md` | 2h | ✅ |
+| 4 | `projeto/GUIA-PROJETO.md` — FiscalLab console | 5h | 🔄 **aqui** |
+| 5 | Prova de conhecimento | 1h | ⬜ |
 
 **Entregável esperado:** `semana-02/projeto/FiscalLab.Console` — leitor de CSV de notas, validador de CNPJ (dígito verificador na mão), calculadora de ICMS, relatório por emitente. **Sem LINQ, sem async** — de propósito.
 
 **As 4 ideias que precisam ficar:** valor vs referência · `string?` e nullable · `decimal` para dinheiro, sempre · `record` para dado, `class` para comportamento.
+
+**Exercícios do projeto** (6 no total, ~6h): 1 domínio · 2 validador de CNPJ (o principal) · 3 ICMS · 4 CSV · 5 relatório · 6 `Sort` com delegate.
+
+**Adendo escrito em 05/08** — `teoria-02-oo.md` ganhou as seções **5.1 Vindo do Delphi** e **5.2 Assembly não é BPL**, respondendo dúvida real dele: o limite de 65.535 exports do formato PE (que o obrigou a quebrar uma package em duas) é do Windows, não do Delphi, e **não existe em .NET**. Em C# o critério para criar interface é design, nunca orçamento de recurso.
 
 ---
 
