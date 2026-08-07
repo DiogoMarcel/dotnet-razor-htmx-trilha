@@ -15,7 +15,7 @@ Deve imprimir `Hello, World!`. Se imprimiu, o SDK está funcionando.
 
 Abra a pasta no VS Code (`code .`). Estrutura final que você vai montar:
 
-```
+```text
 FiscalLab.Console/
 ├── Program.cs
 ├── FiscalLab.Console.csproj
@@ -24,12 +24,16 @@ FiscalLab.Console/
 │   ├── ItemNota.cs
 │   ├── NotaFiscal.cs
 │   ├── Endereco.cs
-│   └── Enums.cs
+│   └── Enums.cs                 <- exceção: enum não ganha arquivo próprio
 ├── Servicos/
 │   ├── ValidadorCnpj.cs         <- SEU
 │   ├── CalculadoraIcms.cs       <- SEU
+│   ├── ResultadoIcms.cs         <- SEU (record de retorno)
 │   ├── LeitorCsv.cs
-│   └── Relatorio.cs             <- SEU
+│   ├── ResultadoLinha.cs        <- saiu de LeitorCsv.cs ao separar
+│   ├── NotaFiscalCsv.cs         <- idem
+│   ├── Relatorio.cs             <- SEU
+│   └── LinhaRelatorio.cs        <- SEU (record de linha do relatório)
 └── dados/
     └── notas.csv
 ```
@@ -86,7 +90,7 @@ public static string Formatar(string cnpj)      // 14 dígitos -> 00.000.000/000
 Algoritmo do dígito verificador — implemente **na mão**, sem copiar pronto:
 
 1. Limpe tudo que não é dígito. Precisa sobrar exatamente **14**.
-2. Rejeite os 14 dígitos iguais (`11111111111111` é matematicamente válido pelo cálculo, mas é inválido por convenção — está na sua massa de teste).
+2. Rejeite os 14 dígitos iguais. Todos são inválidos por convenção da Receita. Dos dez, só `00000000000000` fecha no cálculo do DV (soma zero, resto zero) — `11111111111111` **não** fecha, o DV calculado dele é `80`. Se você já ouviu que "todos iguais passa na conta", isso é verdade para **CPF** (`11111111111` fecha), não para CNPJ: os pesos são outros. A regra existe mesmo assim, por convenção e para barrar `00000000000000`.
 3. **Primeiro dígito:** multiplique os 12 primeiros dígitos pelos pesos `5,4,3,2,9,8,7,6,5,4,3,2`, na ordem. Some tudo. Calcule `resto = soma % 11`. Se `resto < 2`, o dígito é `0`; senão é `11 - resto`.
 4. **Segundo dígito:** mesma coisa com os **13** primeiros dígitos (já incluindo o primeiro DV) e os pesos `6,5,4,3,2,9,8,7,6,5,4,3,2`.
 5. Compare os dois dígitos calculados com os dois últimos do CNPJ.
@@ -98,7 +102,8 @@ Teste com:
 | `11222333000181` | válido |
 | `11.222.333/0001-81` | válido (com pontuação) |
 | `11222333000180` | inválido (DV errado) |
-| `11111111111111` | inválido (todos iguais) |
+| `11111111111111` | inválido (todos iguais — e o DV também não fecha) |
+| `00000000000000` | inválido (todos iguais — este **fecha** no DV; só a regra o barra) |
 | `112223330001` | inválido (12 dígitos) |
 | `""` e `null` | inválido, sem estourar exceção |
 
@@ -140,12 +145,16 @@ Copie o `LeitorCsv.cs` e rode sobre [dados/notas.csv](dados/notas.csv). O arquiv
 
 Imprima:
 
-```
+```text
 ✓ 11 notas carregadas
-✗ 5 linhas rejeitadas:
+✗ 6 linhas rejeitadas:
   Linha 13: número inválido 'abc'
   ...
 ```
+
+11 + 6 = 17. Se a sua conta não fechar com o total de linhas de dados do arquivo, tem
+linha sendo engolida em silêncio — e é justamente isso que um leitor de importação não
+pode fazer.
 
 Depois responda:
 
@@ -157,11 +166,18 @@ Depois responda:
 
 `Servicos/Relatorio.cs`. Agrupe as notas válidas por CNPJ e imprima:
 
-```
+```text
 CNPJ                 Notas    Valor total    Ticket médio
-12.345.678/0001-99       5      5.561,40         1.112,28
+12.345.678/0001-99       4      5.311,40         1.327,85
 98.765.432/0001-10       3     61.631,55        20.543,85
 ```
+
+> **Aviso sobre a massa de teste:** os CNPJs do `notas.csv` são fictícios e **nenhum
+> deles fecha no dígito verificador**. Não é bug do seu validador. Consequência prática:
+> se o seu relatório construir `Empresa` para cada linha, as 11 notas estouram — porque
+> o construtor agora valida o CNPJ (exercício 2). Agrupe pelos DTOs `NotaFiscalCsv`, não
+> pelas entidades. Isso não é contorno: DTO na fronteira e entidade no núcleo é a
+> modelagem certa, e é o mesmo padrão que volta na Semana 5 com o binding do Razor Pages.
 
 Regras:
 
