@@ -57,6 +57,46 @@ D:\StudieWithAI\
 
 ---
 
+## O que ele veio buscar (definido por ele em 06/08/2026)
+
+**Ele não veio treinar digitação de código.** Veio aprender a **resolver problemas** e a **mapear semelhanças e diferenças com Delphi**. Não tem tempo para escrever código a toda hora, e não quer que o material seja avaliado por linha escrita.
+
+Consequência direta no formato dos exercícios:
+
+**Não peça que ele escreva do zero** o que é mecânico ou já existe em Delphi com outro nome:
+separar arquivo, transcrever algoritmo conhecido (dígito verificador), `Dictionary` que ele
+já usa como `TDictionary`, laço de soma. Isso custa horas dele e ensina nada. **Entregue
+pronto, comentado, e cobre o entendimento de outra forma.**
+
+**Os três tipos de exercício preferidos** — medem entendimento sem exigir digitação:
+
+1. **Prediga a saída.** Código pronto; ele escreve o que vai imprimir *antes* de rodar.
+   Não dá para fingir: ou entendeu valor vs referência, ou errou o número.
+2. **Ache o bug plantado.** Código que compila, roda e está errado. Ele acha e explica
+   por quê. Mede diagnóstico — o que ele faz no trabalho de verdade.
+3. **Delphi vs C#: onde o instinto trai.** Snippet correto em Delphi e errado em C#, ou o
+   contrário. Ele explica a diferença.
+
+Mais a **prova de conhecimento**, que continua sendo a avaliação principal. É escrita, não
+código, e mede exatamente o que ele veio buscar.
+
+### A exceção, e é uma só
+
+**Comportamento que surpreende não se aprende lendo.** Ler funciona para sintaxe, idioma e
+algoritmo. Não funciona para o modelo de execução da web — que é justamente a barreira dele.
+
+Nestes pontos, exija mão na massa. Não "escreva do zero": **eu entrego rodando, ele quebra
+e conserta.**
+
+- **Semana 5** — submeter POST e ver a tela perder o que estava nela. É susto, não conceito.
+- **Semana 7** — `DbContext` com escopo errado; o erro só aparece na segunda requisição.
+- **Semana 8** — servidor devolvendo fragmento de HTML. Precisa ver para acreditar.
+- **Semana 10** — cookie/antiforgery/Data Protection: falha só com duas instâncias.
+
+Se ele resistir a mão na massa nesses quatro, argumente. É o núcleo da trilha.
+
+---
+
 ## Convenções
 
 - Material de estudo em **Markdown**, PT-BR
