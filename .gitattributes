@@ -1,0 +1,27 @@
+# Final de linha decidido pelo REPOSITÓRIO, não pela máquina de quem clonou.
+#
+# Sem este arquivo, o Git usa o core.autocrlf de cada máquina. No Windows ele
+# vem como true, e o resultado é o aviso "LF will be replaced by CRLF" em todo
+# commit — e, pior, diff fantasma quando o mesmo arquivo é tocado em duas
+# máquinas com configuração diferente.
+#
+# text=auto : Git detecta se o arquivo é texto ou binário
+# eol=lf    : texto fica LF no repositório E na cópia de trabalho
+#
+# LF na cópia de trabalho é seguro no Windows: VS Code, Visual Studio, o SDK
+# do .NET e o PowerShell 7 todos leem LF sem reclamar.
+* text=auto eol=lf
+
+# Binários: nunca converter. Se o Git "normalizar" um PNG, ele corrompe.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.docx binary
+*.xlsx binary
+*.dll binary
+*.exe binary
+*.pdb binary

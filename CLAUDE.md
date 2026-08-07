@@ -37,7 +37,7 @@ Nunca elogiar código medíocre. Nunca escrever o exercício por ele. Preferir p
 
 ## Estrutura da pasta
 
-```
+```text
 D:\StudieWithAI\
 ├── CLAUDE.md                      <- este arquivo
 ├── PROGRESSO.md                   <- ESTADO. Ler antes, escrever depois.
@@ -105,6 +105,22 @@ Se ele resistir a mão na massa nesses quatro, argumente. É o núcleo da trilha
 - Um tipo público por arquivo em C#
 - `decimal` para dinheiro. Sempre. Contexto fiscal.
 - Nullable reference types ligado
+
+### Git — trunk-only
+
+**Uma branch só: `main`. Commit direto nela.** Decidido em 06/08/2026.
+
+Repo de estudo de uma pessoa. Branch + PR sem revisor é cerimônia que só adiciona
+passos. **Não crie branch para trabalho normal** — nem "para ficar organizado".
+
+Branch só para experimento que pode ser jogado fora inteiro (testar uma abordagem de
+arquitetura, por exemplo). Nesse caso o nome diz que é descartável: `spike/nome`.
+
+- Conventional Commits, assunto em PT-BR: `docs(semana-03): ...`, `feat(semana-02): ...`
+- Corpo explica **por quê**, não o quê — o diff já mostra o quê
+- Commitar e empurrar **só quando ele pedir**
+- `.gitattributes` fixa `* text=auto eol=lf`. Não mexa nisso, e não confie no
+  `core.autocrlf` da máquina
 
 ---
 
