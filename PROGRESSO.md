@@ -11,12 +11,13 @@
 
 | | |
 |---|---|
-| **Semana ativa** | 03 — LINQ e async · **a montar** (Semana 02 fechada em 07/08) |
-| **Fase** | 1 — Fundação (semanas 1–4) |
+| **Bloco ativo** | **Quitação de dívidas** — 5 itens, antes da Semana 03. A montar |
+| **Fase** | 1 — Fundação |
 | **Bloqueio** | Nenhum reportado |
-| **Pendência aberta** | Nada trava a Semana 03. Dívidas a cobrar adiante: ver "Dívidas técnicas" · Correções da Semana 1 seguem **não confirmadas** |
-| **Próximo checkpoint** | Sabatina da Fase 1, ao fim da Semana 4 |
-| **Formato dos exercícios** | **Mudou em 06/08.** Ver `CLAUDE.md` › "O que ele veio buscar" |
+| **Pendência aberta** | As 5 dívidas abaixo. **Regra dele: dívida de compreensão não passa de bloco** |
+| **Próximo checkpoint** | Sabatina da Fase 1, depois da Semana 04 |
+| **Formato** | **Mudou em 06/08, mudou de novo em 07/08.** Ver `CLAUDE.md` › "O que ele veio buscar" |
+| **Ritmo** | **Carga variável, ele não sabe quanto tem.** Blocos auto-contidos, sem orçamento de horas. Conteúdo inteiro, prazo elástico (16–18 blocos) |
 
 ---
 
@@ -137,6 +138,46 @@ Detalhe e memória de cálculo em `respostas-semana-02.md`, seção final.
 **Exercícios do projeto** (6 no total, ~6h): 1 domínio · 2 validador de CNPJ (o principal) · 3 ICMS · 4 CSV · 5 relatório · 6 `Sort` com delegate.
 
 **Adendo escrito em 05/08** — `teoria-02-oo.md` ganhou as seções **5.1 Vindo do Delphi** e **5.2 Assembly não é BPL**, respondendo dúvida real dele: o limite de 65.535 exports do formato PE (que o obrigou a quebrar uma package em duas) é do Windows, não do Delphi, e **não existe em .NET**. Em C# o critério para criar interface é design, nunca orçamento de recurso.
+
+---
+
+## Virada de 07/08/2026 — o alvo mudou, e o método com ele
+
+**Ele explicitou:** as aplicações que vai construir no escritório serão feitas **via IA**. Ele dirige e revisa; não digita. Somado à carga horária que caiu e é agora variável, o modelo da trilha passa a ser o modelo de trabalho real dele: **a ferramenta constrói, ele compreende e julga.**
+
+**Erro meu, corrigido:** eu tratava "mão na massa" como o mecanismo de aprendizado. Não é. O mecanismo é **ser surpreendido**. Digitar era só um jeito de impedir que ele fingisse entendimento — e **previsão faz isso melhor e mais barato**. Os quatro pontos de comportamento surpreendente (POST, escopo de `DbContext`, fragmento HTMX, Data Protection) continuam sendo o núcleo, mas agora eu subo e demonstro, e **ele registra a previsão antes de ver o resultado**.
+
+**Onde eu contrariei ele, e ele aceitou:** revisar código de IA é barra **mais alta**, não mais baixa. Quando ele escreve, o compilador pega metade dos erros; quando revisa, nada pega nada. As duas evidências da própria prova da Semana 2:
+
+- **Q4 funcionou** — achou defeito real no material (ES 7%). Revisão bem feita, porque no fiscal ele é mais forte que eu.
+- **Q6 falhou e sobreviveu a duas passadas.** Se eu tivesse entregado `public List<ItemNota> Itens`, furando a validação da entidade, **ele teria aprovado** — não por desatenção, por não ter o modelo para reconhecer.
+
+Logo: menos digitação, **mais precisão conceitual**. Imprecisão de vocabulário deixa de ser tolerada mesmo quando a conclusão está certa.
+
+**Decisões dele nesta virada:**
+
+| Decisão | Escolha |
+|---|---|
+| Carga horária | **Variável, ele não sabe quanto tem** → blocos auto-contidos, sem orçamento de horas |
+| Conteúdo vs prazo | **Manter o conteúdo inteiro, esticar o prazo** — 16 a 18 blocos, nada cortado |
+| Dívidas | **Compreensão não passa de bloco.** Experiência é agendada com nome, não adiada |
+| Novo pilar | **"O que exigir e o que recusar"** da IA, dado um requisito fiscal. Não existia na trilha |
+
+---
+
+## Bloco de quitação de dívidas · 🔄 ativo, antes da Semana 03
+
+Ele pediu explicitamente: fechar as dívidas antes de seguir. 5 itens.
+
+| # | Dívida | Origem | Como fecha |
+|---|---|---|---|
+| 1 | Inversão de controle | Sem. 2, Q11 | previsão de saída |
+| 2 | `IReadOnlyList` — reprovação | Sem. 2, Q6 | assinatura nova, ele escolhe e justifica |
+| 3 | "Quem está segurando referência?" | Sem. 2, Q12c | demonstração + previsão |
+| 4 | `static` é um por processo | Sem. 2, Q8 | vazamento entre requisições, em número |
+| 5 | **4 correções de acessibilidade** | **Sem. 1, abertas desde 02/08** | ele confirma se aplicou; se não, antes/depois |
+
+O item 5 é o mais antigo e o que mais preocupa: `aria-invalid`/`aria-describedby` voltam na Semana 8, no fragmento que o HTMX devolve no blur do CNPJ. Se não fechar, a Semana 8 tropeça.
 
 ---
 

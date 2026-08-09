@@ -53,47 +53,89 @@ D:\StudieWithAI\
     └── Corrigir.txt               <- devolutiva da revisão
 ```
 
-**Padrão de cada semana** (mantenha): `README.md` com tabela de ordem/tempo → 3 arquivos de teoria (~2h cada) → guia de projeto (~5h) → prova de conhecimento (~1h). Total ~12h.
+**Padrão de cada bloco** (revisado em 07/08/2026): `README.md` com a ordem → **1 arquivo de teoria enxuto** → **código pronto e comentado, escrito pela ferramenta** → exercício de previsão/revisão → prova de conhecimento.
+
+**Não assuma orçamento de horas.** A carga dele varia e ele não sabe quanto tem. Cada bloco precisa ser **auto-contido**: entrega valor sozinho, e não depende de ele terminar o bloco na mesma sessão. Nada de "semana de 12h".
+
+O conteúdo das 12 semanas fica **inteiro**. O que estica é o prazo — 16 a 18 blocos em vez de 12 semanas fechadas. Decidido por ele em 07/08/2026: preferiu esticar o prazo a cortar tema.
 
 ---
 
-## O que ele veio buscar (definido por ele em 06/08/2026)
+## O que ele veio buscar (definido em 06/08, revisado por ele em 07/08/2026)
 
-**Ele não veio treinar digitação de código.** Veio aprender a **resolver problemas** e a **mapear semelhanças e diferenças com Delphi**. Não tem tempo para escrever código a toda hora, e não quer que o material seja avaliado por linha escrita.
+**Ele não veio treinar digitação de código.** Veio aprender a **resolver problemas** e a **mapear semelhanças e diferenças com Delphi**.
 
-Consequência direta no formato dos exercícios:
+**E o alvo mudou em 07/08:** as aplicações que ele vai construir no escritório serão feitas **via IA**. Ele dirige e revisa; não digita. Então a competência a treinar é **julgamento**, não produção: ler código que a IA escreveu, saber o que exigir, e saber o que recusar.
 
-**Não peça que ele escreva do zero** o que é mecânico ou já existe em Delphi com outro nome:
-separar arquivo, transcrever algoritmo conhecido (dígito verificador), `Dictionary` que ele
-já usa como `TDictionary`, laço de soma. Isso custa horas dele e ensina nada. **Entregue
-pronto, comentado, e cobre o entendimento de outra forma.**
+O modelo de trabalho da trilha passa a ser o modelo de trabalho real dele:
+**a ferramenta constrói, ele compreende e julga.**
 
-**Os três tipos de exercício preferidos** — medem entendimento sem exigir digitação:
+### A barra é MAIS ALTA, não mais baixa — e há prova disso
 
-1. **Prediga a saída.** Código pronto; ele escreve o que vai imprimir *antes* de rodar.
-   Não dá para fingir: ou entendeu valor vs referência, ou errou o número.
-2. **Ache o bug plantado.** Código que compila, roda e está errado. Ele acha e explica
-   por quê. Mede diagnóstico — o que ele faz no trabalho de verdade.
+Quando ele escreve o código, o compilador pega metade dos erros. Quando ele **revisa** código
+que a IA escreveu, nada pega nada: compila, roda, e está errado.
+
+Duas evidências da prova da Semana 2, e elas definem o método:
+
+- **Q4 — funcionou.** Ele achou um defeito real no material (ES recebe 7%, não 12%).
+  Revisão bem feita, porque no domínio fiscal ele é mais forte que a ferramenta.
+- **Q6 — falhou, e sobreviveu a duas passadas.** O modelo dele era "`List` só adiciona e
+  remove, `IReadOnlyList` adiciona `Count`". Consequência prática: se a ferramenta tivesse
+  entregado `public List<ItemNota> Itens` — furando toda a validação da entidade — **ele
+  teria aprovado.** Não por desatenção; por não ter o modelo para reconhecer.
+
+**Conclusão operacional: menos digitação, MAIS precisão conceitual.** Revisar exige nomear
+a coisa certa. Na prova da Semana 2 ele chegou na resposta certa com a palavra errada cinco
+vezes, e nas cinco a palavra errada mudaria a implementação de quem o lesse.
+
+Nunca deixe passar imprecisão de vocabulário só porque a conclusão está certa.
+
+### Os quatro tipos de exercício
+
+**Não peça que ele escreva do zero.** Entregue pronto, comentado, e cobre o entendimento:
+
+1. **Prediga a saída.** Ele escreve o que espera *antes* de rodar. **Este é o núcleo, e não
+   é negociável** — ver a próxima seção.
+2. **Ache o bug plantado.** Código que compila, roda e está errado. É o treino literal do
+   trabalho dele: revisar o que a IA produziu.
 3. **Delphi vs C#: onde o instinto trai.** Snippet correto em Delphi e errado em C#, ou o
-   contrário. Ele explica a diferença.
+   contrário.
+4. **O que exigir e o que recusar.** Dado um requisito fiscal, quais decisões técnicas ele
+   precisa impor à IA, e quais respostas dela deve rejeitar. **Novo em 07/08** — é o que
+   mais se aproxima do trabalho real e não estava na trilha.
 
-Mais a **prova de conhecimento**, que continua sendo a avaliação principal. É escrita, não
-código, e mede exatamente o que ele veio buscar.
+Mais a **prova de conhecimento**, que segue sendo a avaliação principal.
 
-### A exceção, e é uma só
+### Previsão substitui mão na massa — e o mecanismo é o susto
 
-**Comportamento que surpreende não se aprende lendo.** Ler funciona para sintaxe, idioma e
-algoritmo. Não funciona para o modelo de execução da web — que é justamente a barreira dele.
+Erro meu, corrigido em 07/08: eu tratava "mão na massa" como o mecanismo. Não é. O mecanismo
+é **ser surpreendido** — descobrir que o previsto não aconteceu. Digitar era só um jeito de
+impedir que ele fingisse entendimento.
 
-Nestes pontos, exija mão na massa. Não "escreva do zero": **eu entrego rodando, ele quebra
-e conserta.**
+**Previsão faz isso melhor e mais barato.** Ele escreve o que espera, a ferramenta roda, e a
+diferença aparece em número. Se errou, o susto é idêntico ao de ter digitado.
 
-- **Semana 5** — submeter POST e ver a tela perder o que estava nela. É susto, não conceito.
-- **Semana 7** — `DbContext` com escopo errado; o erro só aparece na segunda requisição.
-- **Semana 8** — servidor devolvendo fragmento de HTML. Precisa ver para acreditar.
-- **Semana 10** — cookie/antiforgery/Data Protection: falha só com duas instâncias.
+Então os quatro pontos de comportamento surpreendente continuam sendo o núcleo da trilha, mas
+a forma muda: **a ferramenta sobe e demonstra, ele prevê antes, e vê onde errou.**
 
-Se ele resistir a mão na massa nesses quatro, argumente. É o núcleo da trilha.
+- **POST perdendo o que estava na tela** (Razor Pages)
+- **`DbContext` com escopo errado** — só quebra na segunda requisição (EF Core)
+- **Servidor devolvendo fragmento de HTML** — precisa ver no network (HTMX)
+- **Cookie/antiforgery/Data Protection** — só falha com duas instâncias
+
+Em nenhum deles ele precisa digitar. Em todos, **ele precisa registrar a previsão antes de
+ver o resultado.** Se ele quiser pular a previsão e ir direto ao resultado, argumente: sem a
+previsão escrita, não existe susto, e sem susto o conceito não assenta — foi exatamente o que
+a correção da Semana 2 demonstrou (ele consolidou os conceitos em que voltou com o mecanismo
+na mão; não consolidou nada na primeira leitura).
+
+### Regra de dívida (definida por ele em 07/08/2026)
+
+**Dívida de compreensão não passa de bloco.** Se ele não entende o mecanismo, fecha antes de
+avançar. Sem exceção.
+
+**Dívida de experiência é agendada, não adiada** — com bloco e exercício nomeados no
+`PROGRESSO.md`. "Mais adiante" é o que apodrece; agendado com nome não é dívida, é plano.
 
 ---
 
