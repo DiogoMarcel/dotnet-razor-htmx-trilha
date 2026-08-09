@@ -1,0 +1,546 @@
+================================================================================
+CORRIGIR — Semana 02 · prova de conhecimento
+Fonte: semana-02/Exercicios/prova-semana-02.md
+
+1a passada: 07/08/2026 — 6 itens para refazer
+2a passada: 07/08/2026 — 4 resolvidos, 2 seguem, 4 menores em aberto
+3a passada: 07/08/2026 — as 2 perguntas de fechamento respondidas. ENCERRADO
+================================================================================
+
+STATUS FINAL: SEMANA 02 FECHADA.
+
+  As duas perguntas de fechamento foram respondidas e estão certas.
+  Detalhe na seção "3ª PASSADA", no fim deste arquivo.
+
+  Fica em aberto para as próximas semanas, e não trava nada:
+    - Q11, inversão de controle    -> cobrar no 1º exercício da Semana 3
+    - Q8, static é por processo    -> cobrar na Semana 10
+    - Q12c, "quem está segurando"  -> cobrar nas Semanas 4 e 7
+    - Q6 -> resolvida, mas com a resposta na mão. Reprovar sem aviso depois.
+
+================================================================================
+
+PLACAR DA 2a PASSADA
+
+  Q1  valor vs referência ........ OK, incompleto (inalterada)
+  Q2  decimal vs double .......... RESOLVIDO. Exemplo conferido rodando, exato
+  Q3  record vs class ............ RESOLVIDO no principal. Resíduo menor
+  Q4  expressão switch ........... MELHOR DA PROVA. Corrigiu o meu material
+  Q5  throw vs throw ex .......... RESOLVIDO. Resposta correta e completa
+  Q6  IReadOnlyList .............. ** SEGUE ERRADO ** trocou a palavra, não o modelo
+  Q7  TryParse + InvariantCulture  OK, raso (inalterada)
+  Q8  campo static ............... "por processo" segue invertido
+  Q9  onde barrar o CNPJ ......... vocabulário corrigido; segue sem responder ONDE
+  Q10 31 de fevereiro ............ mecanismo segue ausente
+  Q11 delegate ................... 2 de 3. Nomeou delegate + exemplo Delphi ótimo.
+                                   Falta "por que um método aceita código"
+  Q12 using / GC ................. (c) RESOLVIDO no essencial.
+                                   (a) contradiz a sua própria (c)
+
+  RESOLVIDOS NESTA PASSADA: Q2, Q5, Q3 (principal), Q12c, Q9 (vocabulário),
+                            Q11 (nomeou o tipo)
+  SEGUEM PENDENTES:         Q6 (errado), Q11 (1 parte), Q12a (mecanismo),
+                            Q8, Q9 (o "onde"), Q10  — os 3 últimos são menores
+
+================================================================================
+PARTE 1 — O QUE VOCÊ RESOLVEU
+================================================================================
+
+Q2 — decimal vs double · RESOLVIDO, e melhor que o pedido
+------------------------------------------------------------
+  "Double utiliza ponto flutuante binário (base 2); Decimal utiliza
+  representação decimal (base 10)" — exato, e é o mecanismo, não um sintoma.
+  "frações como 0.1 ou 0.2 não possuem representação exata em binário" — exato.
+
+  Rodei o seu exemplo. Ele está numericamente correto, inclusive o valor:
+
+      0.1 + 0.1 + 0.1 == 0.3    -> False
+      valor real                -> 0,30000000000000004
+      0.1m + 0.1m + 0.1m == 0.3m -> True
+
+  Você não chutou o 0.30000000000000004. Ele confere.
+
+  Detalhe fino, para completar e não para corrigir: 0.1 + 0.1 == 0.2 devolve
+  True em double. O erro só aparece na TERCEIRA soma. Isso é o que torna o bug
+  traiçoeiro — ele não aparece no teste com dois itens.
+
+  Uma linha para você guardar junto: decimal é a escolha certa para DINHEIRO,
+  não em geral. É ~10x mais lento e ocupa 16 bytes contra 8. Em física, gráficos
+  ou machine learning, double está certo e decimal está errado.
+
+Q5 — throw vs throw ex · RESOLVIDO
+------------------------------------------------------------
+  Resposta correta e completa. Nomeou o mecanismo (Stack Trace), disse qual dos
+  dois faz o quê, e explicou a consequência (destrói o histórico da chamada
+  original). Nada a corrigir.
+
+  Só acrescento a terceira opção, que não foi perguntada mas fecha o assunto:
+  quando você quer TRADUZIR a exceção para o vocabulário da sua camada, o certo
+  não é nenhum dos dois:
+
+      throw new EmpresaNaoEncontradaException("CNPJ ...", ex);
+                                                          ^^^ InnerException
+
+  Ganha contexto E preserva a cadeia inteira. E fixe: `throw ex;` nunca é a
+  escolha certa. Não existe caso.
+
+Q3 — record é tipo por referência · RESOLVIDO no principal
+------------------------------------------------------------
+  Corrigiu para "Passado por referência / Passado por referência". Era o erro
+  grave da 1a passada — a armadilha onde a mesma palavra significa o oposto em
+  Delphi. Resolvido.
+
+  RESÍDUO, e é secundário: "Mutável (get-set) / Imutável" ainda está como se
+  fosse regra. Não é.
+
+      Record MUTÁVEL — compila:
+          public record Coisa { public string Nome { get; set; } }
+
+      Class IMUTÁVEL — é o seu próprio ItemNota, todas as propriedades { get; }
+
+  O record posicional gera propriedades `init` (só o construtor escreve), então
+  imutabilidade é o DEFAULT, não a definição. A definição do record é a
+  IGUALDADE POR VALOR — que é o que você já disse com "dados por atributos".
+
+  Ficou faltando dizer isso explicitamente, e é o coração do record:
+
+      var a = new Endereco("Rua X", "10", "Joinville", "SC", "89210-100");
+      var d = new Endereco("Rua X", "10", "Joinville", "SC", "89210-100");
+      ReferenceEquals(a, d)   // False — objetos DISTINTOS no heap
+      a == d                  // True  — iguais por VALOR
+
+  Duas linhas: objetos diferentes, iguais. Numa class, `a == d` seria False.
+
+Q12c — o GC muda a pergunta · RESOLVIDO no essencial
+------------------------------------------------------------
+  "Não livra de pensar no ciclo de vida, altera a pergunta. (...) o GC automatiza
+  a limpeza da RAM, mas transfere ao desenvolvedor gerenciar recursos externos."
+
+  Certo, e bem formulado. Você pegou a troca e a nova pergunta.
+
+  O QUE FALTOU, e é a parte que morde em servidor: existe uma SEGUNDA pergunta
+  nova, e ela é mais perigosa que a dos recursos do SO, porque nada te avisa.
+
+      "Alguma coisa de vida longa está SEGURANDO uma referência a este objeto?"
+
+  Um campo static, um event handler não desinscrito, um cache sem expiração. O
+  GC não coleta o que ainda é ALCANÇÁVEL.
+
+  Inverta o vocabulário do Delphi para entender por que é pior:
+
+      Delphi: vazamento = "esqueci de LIBERAR"   -> falta código num lugar
+      C#:     vazamento = "esqueci de SOLTAR"    -> sobra referência num lugar
+
+  Achar código que falta é fácil: você procura o Free que não existe. Achar
+  referência que sobra é difícil: não há linha errada, há uma linha certa
+  segurando algo por tempo demais. Precisa de profiler de memória.
+
+  E existe uma TERCEIRA, que é a mesma pergunta virada para cima:
+
+      "Quanto tempo este objeto DEVE viver?"
+
+  Na Semana 4 isso deixa de ser filosofia e vira uma linha de código:
+  AddScoped (uma por requisição), AddSingleton (uma por aplicação),
+  AddTransient (uma por injeção). Errar aqui é exatamente o bug plantado da
+  Semana 7 — DbContext registrado como singleton, que funciona na primeira
+  requisição e quebra na segunda.
+
+Q11 — você nomeou o tipo, e o exemplo Delphi está ótimo
+------------------------------------------------------------
+  "Isso é um delegate e funciona como ponteiro" — agora está lá. E o exemplo:
+
+      Notas.Sort(TComparer<TNotaFiscal>.Construct(
+        function(const A, B: TNotaFiscal): Integer
+        begin
+          Result := CompareValue(B.ValorTotal, A.ValorTotal);
+        end));
+
+  Isso é melhor do que eu pedi. Você não só mapeou a construção como inverteu
+  B e A e comentou que é para decrescente — o que mostra que você entendeu o
+  mecanismo do sinal do CompareTo, não só a sintaxe.
+
+  Precisão: "funciona como ponteiro" é boa intuição, e é quase isso. Um delegate
+  é um OBJETO que guarda dois campos: uma referência ao método (o ponteiro) e
+  uma referência ao alvo (a instância em que ele será chamado, ou null se for
+  static). É por isso que uma lambda pode capturar variáveis do escopo — o
+  ponteiro sozinho não conseguiria.
+
+  Q11 segue com uma parte em aberto. Ver Parte 2, item 2.
+
+================================================================================
+PARTE 2 — O QUE SEGUE PENDENTE
+================================================================================
+
+1. Q6 — IReadOnlyList: você trocou a PALAVRA, não o MODELO.  ** PRIORIDADE 1 **
+--------------------------------------------------------------------------------
+
+  Antes:  "o IReadOnlyList<> ADICIONA mais funcionalidades como count e foreach"
+  Agora:  "o IReadOnlyList<> CONTEM mais funcionalidades como count e foreach"
+
+  A afirmação continua invertida. E a primeira metade da frase é o erro maior,
+  que ficou intacta nas duas versões:
+
+      "Um list<> apenas pode adicionar e remover"
+
+  Isso está errado. List<T> tem Count, indexador [i], foreach, Sort, IndexOf,
+  Contains, AddRange, BinarySearch — MAIS Add, Remove, Insert, Clear.
+  List<T> tem TUDO que IReadOnlyList<T> tem, e mais.
+
+  A hierarquia real, de menos para mais capacidade:
+
+      IEnumerable<T>                  -> só foreach
+        IReadOnlyCollection<T>        -> + Count
+          IReadOnlyList<T>            -> + indexador [i]
+                                          (fim. não tem mutação.)
+
+      List<T> implementa todas as três acima, MAIS IList<T> e ICollection<T>,
+              que é onde vivem Add / Remove / Insert / Clear.
+
+  Então: IReadOnlyList<T> é um SUBCONJUNTO de List<T>. Escolher a interface na
+  propriedade é escolher expor MENOS, deliberadamente. O ganho não é
+  funcionalidade — é a garantia NEGATIVA de que quem recebe não consegue mexer.
+
+  POR QUE INSISTO NUM ITEM QUE PARECE VOCABULÁRIO
+    Se o seu modelo mental é "a interface adiciona capacidade", você vai escolher
+    tipo de retorno pelo motivo errado a cada assinatura que escrever daqui pra
+    frente. E vai concluir o oposto do certo: vai devolver List<T> quando quiser
+    "dar mais poder a quem chama", que é exatamente o que fura encapsulamento.
+
+    A regra é: devolva o MENOS capaz que atende quem chama.
+
+  O QUE A ESCOLHA COMPRA, concretamente, no seu NotaFiscal:
+
+      private readonly List<ItemNota> _itens = [];      // aqui EU mexo
+      public IReadOnlyList<ItemNota> Itens => _itens;   // aqui você só LÊ
+
+    Se Itens fosse List<ItemNota>:
+
+      nota.Autorizar();
+      nota.Itens.Add(new ItemNota("Contrabando", 1m, 999999m));   // COMPILA
+
+    AdicionarItem checa se a nota está EmDigitacao. Itens.Add não checa nada.
+    A regra de negócio existiria com uma porta aberta ao lado dela.
+
+  A SUA ÚLTIMA FRASE ESTÁ CERTA, e é a única parte que precisa ficar:
+    "garante que a propriedade não será alterada por acidente."
+    Guarde essa. Jogue o resto da resposta fora.
+
+  LIMITE HONESTO: não é imutabilidade real. `(List<ItemNota>)nota.Itens`
+  contorna, porque o objeto por trás continua sendo uma List. Impede ACIDENTE,
+  não sabotagem — e é o que se pede de um design, não de um cofre.
+
+  PARALELO DELPHI: é o mesmo motivo pelo qual você declara uma propriedade
+  `property Itens: TEnumerable<TItem> read GetItens` em vez de expor a
+  TObjectList<> direto. Você já faz isso. Só o nome da interface é novo.
+
+2. Q11 — falta "por que um método aceita código como parâmetro"
+--------------------------------------------------------------------------------
+
+  A pergunta tinha 3 partes. Você respondeu que tipo é (delegate) e o
+  equivalente Delphi. A do meio ficou sem resposta, e é a que explica o LINQ.
+
+  A RESPOSTA
+    Sort sabe ORDENAR: quicksort, particionamento, troca de elementos.
+    Algoritmo genérico, escrito uma vez, testado exaustivamente pela equipe
+    do .NET.
+
+    O que Sort NÃO SABE E NÃO TEM COMO SABER é o que "maior" significa para um
+    LinhaRelatorio. Por valor total? Por CNPJ alfabético? Por quantidade de
+    notas? Crescente ou decrescente? Só quem chama sabe.
+
+    Então: Sort implementa o que NÃO VARIA (o algoritmo) e recebe o que VARIA
+    (o critério) como parâmetro. Isso é INVERSÃO DE CONTROLE — a biblioteca
+    chama o SEU código, não o contrário.
+
+  POR QUE AS ALTERNATIVAS SÃO PIORES
+    (a) LinhaRelatorio implementar IComparable<T>: funciona, mas fixa UMA ordem
+        natural no tipo. Se uma tela ordena por valor e outra por CNPJ, travou.
+    (b) Escrever seu próprio laço de ordenação: reimplementar quicksort com os
+        mesmos bugs de índice que todo mundo comete.
+
+  UMA IMPRECISÃO QUE SOBROU, e ela atrapalha
+    Você escreveu: "o valor retornado é uma expressão que irá executar no
+    futuro, NÃO É UM VALOR DE FATO".
+
+    A última parte está errada, e ela é o motivo pelo qual a Semana 3 confunde
+    quem pensa assim. A lambda É um valor de fato: uma instância de delegate,
+    um objeto no heap. Você pode guardá-la numa variável, passá-la, devolvê-la
+    de um método:
+
+        Comparison<LinhaRelatorio> porValor = (a, b) => b.ValorTotal.CompareTo(a.ValorTotal);
+        linhas.Sort(porValor);       // idêntico a passar a lambda inline
+
+    Se lambda "não fosse um valor", a linha de cima não compilaria. A parte de
+    "executa no futuro" está certa: quem a invoca é o Sort, N vezes, durante a
+    ordenação.
+
+    Por que isso importa para a Semana 3: no LINQ você vai ARMAZENAR e COMPOR
+    esses valores (`var filtro = ...; query.Where(filtro)`), e vai encontrar
+    Expression<Func<T,bool>> — que é o delegate transformado em ÁRVORE DE DADOS
+    para o EF Core traduzir em SQL. Nada disso faz sentido se lambda "não é um
+    valor".
+
+3. Q12a — a sua própria letra (c) refuta a sua letra (a)
+--------------------------------------------------------------------------------
+
+  Em (a) você escreveu:
+      "é necessário deixar explícito a LIMPEZA DE MEMÓRIA"
+
+  Em (c) você escreveu:
+      "o GC automatiza A LIMPEZA DA RAM, mas transfere ao desenvolvedor
+       gerenciar RECURSOS EXTERNOS"
+
+  A (c) está certa e contradiz a (a). Você tem o modelo correto — a (a) ficou
+  com a redação da primeira versão.
+
+  Fixando: Dispose NÃO É SOBRE MEMÓRIA. A memória do StreamReader o GC recolhe
+  sozinho, sem problema. O que o GC não faz é liberar o HANDLE DE ARQUIVO na
+  hora certa.
+
+      GC      -> memória gerenciada, EM ALGUM MOMENTO (não determinístico)
+      Dispose -> recurso NÃO-gerenciado, AGORA (determinístico)
+
+  Dispose é sobre TEMPO, não sobre espaço.
+
+  Consequência prática, e é a que aparece em produção: sem Dispose, o arquivo
+  fica travado até o finalizador rodar — e finalizador roda quando o GC decidir,
+  que pode ser minutos depois, ou nunca, se o processo morrer antes. No Windows,
+  arquivo travado significa que a próxima importação não consegue abrir.
+
+  Sobre a sua (b): Empresa / NotaFiscal / ItemNota não dispensam `using` porque
+  "são dados cuidados pela RAM". É porque NÃO IMPLEMENTAM IDisposable. E se você
+  TENTAR usar `using` neles, é ERRO DE COMPILAÇÃO — não é escolha de estilo, o
+  compilador te impede. Essa é a diferença mais confortável em relação ao
+  Delphi: lá, esquecer o Free compila e vaza; aqui, o tipo te diz se precisa.
+
+4. Q8 — "independente de quantos PROCESSOS" segue invertido
+--------------------------------------------------------------------------------
+
+  static é UM POR PROCESSO. Dois processos = duas cópias independentes que não
+  se conhecem. O que compartilha a mesma cópia são as THREADS e as REQUISIÇÕES
+  dentro do mesmo processo.
+
+  A troca de palavra inverte a conclusão prática, e é por isso que insisto:
+
+    Se static fosse global entre processos, um cache static funcionaria com o
+    sistema escalado em 3 instâncias. Sendo POR processo, cada instância tem o
+    SEU cache e eles divergem em silêncio: o usuário salva na instância 1, o
+    load balancer manda a próxima requisição para a instância 2, e ele vê dado
+    velho.
+
+  A escada para guardar:
+
+      const / static readonly imutável -> seguro sempre
+      static MUTÁVEL                   -> corrompe entre REQUISIÇÕES (1 processo)
+      static como cache                -> DIVERGE entre INSTÂNCIAS (N processos)
+
+  A terceira linha é literalmente a Semana 10: cookie/antiforgery emitido numa
+  instância que a outra não consegue ler, porque a chave estava em memória local.
+
+  O que você acertou e é o mais importante: "dois usuários com duas empresas
+  poderão visualizar vazamento de informações". Exato, e em sistema fiscal é
+  incidente reportável.
+
+  Faltou o segundo perigo: static ENRAÍZA o objeto. É o mesmo ponto da Q12c —
+  o GC não coleta o que um campo static alcança. static Dictionary como cache
+  sem expiração cresce até o processo cair.
+
+5. Q9 — vocabulário corrigido, mas você ainda não respondeu ONDE
+--------------------------------------------------------------------------------
+
+  "números repetidos" está certo agora. Era "sequenciais", que é outra regra
+  (12345678901234) e não é a que existe. Resolvido.
+
+  Mas a pergunta era ONDE é o lugar certo de barrar, e "ao validar CNPJ" é o
+  QUE. A resposta é a separação de camada:
+
+    NÃO no LeitorCsv. O leitor valida FORMATO. Se o dígito verificador morasse
+    lá, trocar o layout do arquivo (posicional, XML, JSON) obrigaria a
+    reescrever regra fiscal. Formato e regra de negócio mudam por motivos
+    diferentes e em ritmos diferentes — por isso vivem separados.
+
+    NO DOMÍNIO, no construtor de Empresa, que se recusa a existir com CNPJ
+    inválido. Garantia forte: nenhum código adiante precisa checar de novo.
+
+    E NUM PASSO DE VALIDAÇÃO DE IMPORTAÇÃO, entre ler e persistir, quando você
+    quer o relatório do lote inteiro com as linhas ruins MARCADAS em vez de
+    abortadas.
+
+  Os dois últimos não competem: a importação REPORTA, o domínio IMPEDE.
+  Relatório de importação que descarta linha em silêncio é o pior dos mundos —
+  o operador fiscal não descobre que faltou nota até o fechamento do mês.
+
+6. Q10 — conclusão certa, mecanismo ainda ausente
+--------------------------------------------------------------------------------
+
+  "acredito que por esse motivo é nativo" é observação, não explicação. O
+  mecanismo:
+
+    DateTime NÃO é um struct com campos dia/mês/ano independentes. É um CONTADOR
+    DE TICKS desde 01/01/0001. Não existe o número de ticks correspondente a 31
+    de fevereiro, então o valor é IMPOSSÍVEL DE REPRESENTAR. TryParseExact não
+    "consulta o calendário" — ele tenta construir o valor e não consegue.
+
+  A diferença entre isso e uma validação: validação você pode esquecer de
+  chamar. Impossibilidade de representação você não consegue burlar.
+
+  O contraste que fecha: se o DTO guardasse a data como string, 31/02 entraria,
+  atravessaria o sistema e explodiria três camadas depois — na gravação no banco
+  ou num ToString de relatório, longe da origem.
+
+  Regra: converta na fronteira, para o tipo MAIS RESTRITIVO disponível. O erro
+  aparece onde nasceu.
+
+7. Q1 e Q7 — não foram tocadas, e continuam OK com lacuna
+--------------------------------------------------------------------------------
+
+  Q1: "cópia direta do endereço" está certo, e a escolha da palavra "cópia"
+  mostra que você entendeu o mecanismo. Faltou a consequência:
+
+      void Renomear(Empresa e) => e.RazaoSocial = "Novo";
+      Renomear(empresa);       // muda           <- muta o objeto apontado
+
+      void Trocar(Empresa e) => e = new Empresa("Outra", ...);
+      Trocar(empresa);         // NÃO muda       <- reaponta a CÓPIA
+
+  Se é "cópia do endereço", reatribuir o parâmetro troca a cópia, não o
+  original. Resumo: por referência, passada POR VALOR. Em Delphi é idêntico —
+  precisa de `var Obj: TEmpresa` para o chamador ver a reatribuição.
+
+  Q7: TryParse está completo. InvariantCulture ficou em "garantia de dados
+  corretos", que é genérico demais para você reconhecer o problema quando
+  aparecer. A regra de decisão e o exemplo:
+
+      InvariantCulture   -> LER e GRAVAR dado de MÁQUINA (arquivo, API, banco, log)
+      Cultura do usuário -> EXIBIR na tela
+
+      decimal.Parse("1234.56") numa máquina pt-BR lê o ponto como separador de
+      MILHAR e devolve 123456. Fator 100. Sem exceção, sem aviso.
+
+  O Program.cs faz as duas coisas de propósito: lê o CSV com InvariantCulture,
+  imprime o relatório com pt-BR. Duas linhas, dois motivos.
+
+================================================================================
+VEREDITO DA 2a PASSADA
+================================================================================
+
+APROVADO. Semana 2 fechada.
+
+Quatro dos seis itens da 1a passada foram resolvidos, e dois deles (Q2 e Q5) com
+respostas que não precisam de nenhuma ressalva. O exemplo numérico da Q2 eu
+conferi rodando e ele está exato até o último dígito.
+
+O QUE MUDOU NO MEU DIAGNÓSTICO
+  Na 1a passada eu disse que o padrão era "o que você deduz, acerta; o que tenta
+  lembrar, escorrega". A 2a passada corrige isso: quando você VOLTA num conceito
+  com a explicação do mecanismo na mão, você o consolida de verdade — Q2, Q5 e
+  Q12c ficaram sólidas, não decoradas. O problema não era retenção, era que a
+  primeira exposição foi por leitura.
+
+  Isso valida a mudança de formato da Semana 3. E aponta o que fazer: primeira
+  exposição precisa ser ATIVA (prever saída, achar bug), não passiva.
+
+O ÚNICO QUE ME PREOCUPA — Q6
+  É o único que ficou errado depois de duas passadas, e é o único onde você
+  editou a palavra sem revisitar o modelo. "Um list<> apenas pode adicionar e
+  remover" continua lá nas duas versões.
+
+  Não é sobre IReadOnlyList. É sobre a direção da relação entre interface e
+  implementação, e essa ideia governa toda escolha de assinatura que você vai
+  fazer daqui pra frente. Vale 10 minutos.
+
+DUAS PERGUNTAS PARA FECHAR, e só duas
+  (1) Numa frase: List<T> tem MAIS ou MENOS métodos que IReadOnlyList<T>? E por
+      que então a propriedade Itens devolve a que tem menos?
+
+  (2) Se record é tipo por REFERÊNCIA (você já corrigiu isso), e um método faz
+      `endereco = endereco with { Uf = "PR" }`, o chamador vê a mudança? Por quê?
+      Cruze com a sua própria resposta da Q1 — as duas se respondem.
+
+  A (2) é a que vale mais: ela junta "record é referência" com "reatribuir o
+  parâmetro não afeta o chamador". Acertar ela prova que os dois assentaram.
+
+PODE ABRIR A SEMANA 3. Ela vai cobrar delegate no primeiro exercício, e você já
+tem 2 dos 3 pedaços — falta só a inversão de controle, item 2 da Parte 2.
+
+================================================================================
+3a PASSADA — as duas perguntas de fechamento · 07/08/2026 · AMBAS CERTAS
+================================================================================
+
+(1) List<T> tem mais ou menos que IReadOnlyList<T>?  ·  CERTA
+--------------------------------------------------------------------------------
+  Resposta dele: "list<> tem mais add/remove, itens devolve o que é capaz de
+  atender."
+
+  Direção corrigida, e a segunda metade é o princípio certo, dito com outras
+  palavras: DEVOLVA O MENOS CAPAZ QUE SATISFAZ QUEM CHAMA.
+
+  RESSALVA REGISTRADA, e não é implicância: esta resposta vem depois de eu ter
+  escrito a explicação inteira no item 1 da Parte 2. É CONFIRMAÇÃO de que o
+  modelo invertido foi desfeito, não dedução independente. Diferente da (2)
+  abaixo, que ele construiu sozinho.
+
+  AÇÃO: reprovar sem aviso mais adiante, com uma assinatura nova em vez da
+  mesma pergunta. Algo como "este método devolve uma lista de notas rejeitadas
+  para a tela montar a tabela — qual tipo de retorno, e por quê?". Se sair
+  IReadOnlyList com justificativa, assentou de verdade.
+
+(2) `endereco = endereco with { Uf = "PR" }` dentro de um método  ·  CERTA
+--------------------------------------------------------------------------------
+  Resposta dele: "não, o chamador não vê, existem dois motivos combinados: a
+  imutabilidade do with e a passagem de parâmetros por valor. with cria uma nova
+  instância e o parâmetro passado ao método é uma cópia da referência - ponteiro"
+
+  Correta, completa, e — o que importa mais — ele viu que são DOIS mecanismos
+  agindo juntos, não um. Nomeou os dois certos:
+
+    1. `with` cria instância NOVA. O objeto original nunca é tocado.
+    2. O parâmetro é CÓPIA da referência. Reatribuir troca só a cópia.
+
+  Isto fecha o item 1 (record é referência) junto com a Q1 (reatribuir o
+  parâmetro não afeta o chamador). Era exatamente o que a pergunta media.
+
+  A MATRIZ COMPLETA que as respostas Q1 + esta montam juntas:
+
+    o que o método faz                    | chamador vê? | por quê
+    --------------------------------------|--------------|---------------------
+    empresa.RazaoSocial = "X"             | SIM          | muta o objeto compartilhado
+    empresa = new Empresa(...)            | não          | reaponta a CÓPIA da referência
+    endereco = endereco with { ... }      | não          | objeto novo + reaponta a cópia
+    endereco.Uf = "PR"                    | NÃO COMPILA  | record posicional gera `init`
+    ref Empresa e; e = new(...)           | SIM          | `ref` passa a variável, não cópia
+
+  A LINHA 4 é a que ele não mencionou, e vale acrescentar: num record
+  posicional o caminho da mutação NÃO EXISTE. O compilador obriga a usar `with`,
+  que sempre produz objeto novo. Por isso record é seguro de passar por aí sem
+  se preocupar com quem vai alterar — não é convenção de equipe, é o tipo
+  impedindo. É a mesma ideia do IReadOnlyList da (1): o tipo tirando capacidade
+  de propósito.
+
+  ADIANTE, na Semana 3: `record struct` inverte isso de novo — é tipo por VALOR,
+  copia o conteúdo inteiro. Três comportamentos diferentes com nomes parecidos
+  (class / record / record struct), e o Delphi só te preparou para dois deles.
+
+================================================================================
+ENCERRAMENTO
+================================================================================
+
+Semana 02 fechada em 3 passadas. 12 de 12 respondidas, 2 perguntas de
+fechamento certas.
+
+O que esta correção ensinou SOBRE O MÉTODO, e vale mais que o placar:
+
+  Ele consolida quando VOLTA num conceito com o mecanismo na mão — Q2, Q5, Q12c
+  e a pergunta (2) desta passada ficaram sólidas. Não consolidou nada na
+  primeira leitura da teoria.
+
+  Conclusão: a primeira exposição precisa ser ATIVA. Prever saída, achar bug,
+  explicar por que o instinto Delphi falha. Ler definição não gruda.
+
+  Isso já está registrado em CLAUDE.md > "O que ele veio buscar" e vale da
+  Semana 3 em diante.
+
+Uma nota de mão dupla: na Q4 ele corrigiu o meu material (ES recebe 7%,
+Resolução do Senado 22/1989). O conhecimento fiscal dele é superior ao meu.
+Quando material meu contrariar a legislação, ele tem razão até prova em
+contrário — e foi instruído a reclamar nesses casos.
