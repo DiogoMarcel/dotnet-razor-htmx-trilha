@@ -139,6 +139,17 @@ Requisitos:
 
 Sul/Sudeste: PR, SC, RS, SP, RJ, MG, ES.
 
+> **Correção registrada em 07/08/2026 — o aluno apontou e estava certo.** Na legislação
+> real, **ES é destino privilegiado**: a alíquota de 7% vale para Sul/Sudeste destinadas ao
+> Norte, Nordeste, Centro-Oeste **e ao Espírito Santo** (Resolução do Senado nº 22/1989,
+> art. 1º, parágrafo único). Ou seja, `SP → ES` é 7%, não 12% como esta regra simplificada
+> devolve. ES aparece nos **dois** lados: é Sudeste como origem, e privilegiado como destino.
+>
+> A regra acima fica simplificada de propósito — o objetivo do exercício é expressão
+> `switch` e arredondamento, não tributar. Mas saiba que é simplificação, e não descubra
+> isso numa autuação. A alíquota interna também varia por estado (SP 18%, RJ 20% com o
+> FECP, MG 18%), o que esta tabela achata em 18% para todos.
+
 ### 4. Carregar o CSV (1h)
 
 Copie o `LeitorCsv.cs` e rode sobre [dados/notas.csv](dados/notas.csv). O arquivo tem **17 linhas e sujeira plantada**.
@@ -200,16 +211,16 @@ Explique por escrito o que é aquele `(a, b) => ...` — que tipo é, e por que 
 
 ## Prova de conhecimento — Semana 2
 
-Sem consultar. Escreva em `respostas-semana-02.md`.
+**A prova mora em [`../Exercícios/prova-semana-02.md`](../Exercícios/prova-semana-02.md).**
+São **12 questões** — as 8 originais mais 4 acrescentadas em 06/08/2026. Responda lá
+mesmo, no arquivo, embaixo de cada pergunta.
 
-1. Uma `Empresa` é passada para um método que altera `RazaoSocial`. O chamador vê a alteração? E se fosse um `decimal`? Explique o mecanismo.
-2. Por que `decimal` e não `double` para valor de nota? Dê um exemplo numérico.
-3. Diferença entre `record` e `class`. Por que `Endereco` é record e `Empresa` é class?
-4. Escreva de cabeça uma expressão `switch` que devolve a alíquota conforme UF de origem e destino.
-5. Diferença entre `throw;` e `throw ex;` dentro de um `catch`.
-6. Por que `IReadOnlyList<ItemNota>` em vez de `List<ItemNota>` na propriedade `Itens`?
-7. Por que ler CSV com `TryParse` e `CultureInfo.InvariantCulture` em vez de `Parse` direto?
-8. O que é um campo `static` e por que ele é perigoso num servidor web?
+> Antes esta seção repetia as 8 questões aqui. Duas fontes para a mesma prova fizeram
+> exatamente o que era previsível: a lista daqui ficou desatualizada e as 4 novas passaram
+> em branco. Fonte única agora.
+
+Sem consultar nada — nem a teoria, nem o código, nem o
+`gabarito-semana-02-CLAUDE.md`.
 
 E a tarefa da trilha, do [01-trilha-12-semanas.md](../../01-trilha-12-semanas.md):
 
