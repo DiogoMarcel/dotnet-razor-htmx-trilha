@@ -176,5 +176,6 @@ Existem notas locais fora desta pasta e fora do versionamento, com a análise qu
 
 ## Dívidas de aprendizado abertas
 
-- **Acessibilidade** — lacuna identificada na Semana 1 (`aria-invalid`, `aria-describedby`). Reaparece na Semana 8 (fragmentos HTMX de validação) e Semana 9. Cobrar.
+- **Precisão de vocabulário.** A dívida transversal, e a mais séria. Confirmada em três avaliações: prova da Semana 2 (5 ocorrências), previsões do bloco de quitação (3 dos 4 erros), acessibilidade 5.4. A conclusão chega certa; a frase não carrega informação suficiente para outra pessoa implementar. **Regra em vigor desde 12/08/2026: resposta que reformula o enunciado conta como não-resposta.**
+- **Acessibilidade** — conceito fechado em 12/08. Falta **execução**: `aria-*` em fragmento gerado por servidor. Agendada para a Semana 8 (blur do CNPJ), cobrindo `role="alert"`/`aria-live` e `aria-invalid` como estado condicional.
 - **Espaçamento é responsabilidade do container pai**, não do elemento filho. Princípio, não regra pontual.

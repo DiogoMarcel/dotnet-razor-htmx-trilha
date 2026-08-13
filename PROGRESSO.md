@@ -3,7 +3,7 @@
 > **Este arquivo é o estado do estudo.** Cowork e Claude Code leem daqui antes de responder qualquer coisa, e escrevem aqui ao fim de cada sessão. Se este arquivo estiver desatualizado, as duas ferramentas dão conselho errado.
 
 **Aluno:** Diogo Marcel · **Início:** 26/07/2026 · **Ritmo alvo:** 10–15h/semana
-**Última atualização:** 07/08/2026
+**Última atualização:** 12/08/2026
 
 ---
 
@@ -11,10 +11,10 @@
 
 | | |
 |---|---|
-| **Bloco ativo** | **Quitação de dívidas** — 5 itens, antes da Semana 03. A montar |
+| **Bloco ativo** | **Semana 03 — LINQ e async.** A montar |
 | **Fase** | 1 — Fundação |
-| **Bloqueio** | Nenhum reportado |
-| **Pendência aberta** | As 5 dívidas abaixo. **Regra dele: dívida de compreensão não passa de bloco** |
+| **Bloqueio** | Nenhum |
+| **Pendência aberta** | Nenhuma dívida de compreensão. **As 5 fecharam em 12/08** |
 | **Próximo checkpoint** | Sabatina da Fase 1, depois da Semana 04 |
 | **Formato** | **Mudou em 06/08, mudou de novo em 07/08.** Ver `CLAUDE.md` › "O que ele veio buscar" |
 | **Ritmo** | **Carga variável, ele não sabe quanto tem.** Blocos auto-contidos, sem orçamento de horas. Conteúdo inteiro, prazo elástico (16–18 blocos) |
@@ -31,12 +31,15 @@
 
 **Correções apontadas** (`semana-01/Corrigir.txt`) — 4 itens:
 
-1. ❓ Estilo inline em `detalhe.html` linha 64 → resolver espaçamento no container pai, não no elemento
-2. ❓ Erro de CNPJ não é anunciado a leitor de tela → falta `aria-invalid="true"` e `aria-describedby` com lista. **Reaparece na Semana 8** — o fragmento devolvido por HTMX no blur precisa exatamente destes atributos.
-3. ❓ `.dados dd { text-align: right }` → alinhar à esquerda; direita só para coluna numérica
-4. ❓ Exercício 4 (grid CEP 3 + Logradouro 6 + Número 3 = 12) já estava correto — **pergunta em aberto:** você conferiu e viu que somava, ou passou batido?
+1. ✅ Estilo inline em `detalhe.html` linha 64 → aplicado no protótipo (`display:flex` + `gap`)
+2. ✅ Erro de CNPJ não anunciado → `aria-invalid`/`aria-describedby` aplicados no protótipo **e** compreendidos, fechado em 12/08 no bloco de quitação
+3. ✅ `.dados dd { text-align: right }` → removido
+4. ✅ Exercício 4 (grid CEP 3 + Logradouro 6 + Número 3 = 12) → ele conferiu, e reconheceu o padrão de 12 colunas por experiência. `estilos.css:351` confirma `repeat(12, 1fr)`
 
-> **Ação:** confirmar se os 4 foram aplicados. O item 2 é o único que trava a Semana 8.
+> **Fechado em 12/08/2026.** O que a verificação achou: as 3 correções de código estavam
+> aplicadas no `prototipo/`, mas o arquivo que **ele** escreveu
+> (`Exercícios/cadastro_empresa.html`) seguia com zero `aria-*` — o protótipo estava certo
+> porque a ferramenta o escreveu. O exercício da dívida 5 usou o código dele, não o meu.
 
 **Avaliação:** base de HTTP sólida. HTML/CSS funcional, com lacuna em acessibilidade — que não é detalhe em sistema usado 8h/dia por operador fiscal.
 
@@ -165,19 +168,44 @@ Logo: menos digitação, **mais precisão conceitual**. Imprecisão de vocabulá
 
 ---
 
-## Bloco de quitação de dívidas · 🔄 ativo, antes da Semana 03
+## Bloco de quitação de dívidas · ✅ concluído em 12/08/2026
 
-Ele pediu explicitamente: fechar as dívidas antes de seguir. 5 itens.
+Ele pediu explicitamente: fechar as dívidas antes de seguir. 5 itens. Material em
+[`quitacao-dividas/`](quitacao-dividas/) — 4 demos em `Quitacao.Console`, previsões escritas
+por ele **antes** de rodar (o protocolo foi cumprido), e o exercício de acessibilidade.
 
-| # | Dívida | Origem | Como fecha |
+| # | Dívida | Origem | Resultado |
 |---|---|---|---|
-| 1 | Inversão de controle | Sem. 2, Q11 | previsão de saída |
-| 2 | `IReadOnlyList` — reprovação | Sem. 2, Q6 | assinatura nova, ele escolhe e justifica |
-| 3 | "Quem está segurando referência?" | Sem. 2, Q12c | demonstração + previsão |
-| 4 | `static` é um por processo | Sem. 2, Q8 | vazamento entre requisições, em número |
-| 5 | **4 correções de acessibilidade** | **Sem. 1, abertas desde 02/08** | ele confirma se aplicou; se não, antes/depois |
+| 1 | Inversão de controle | Sem. 2, Q11 | ✅ **fechada** — as 4 ordenações certas, inclusive o critério composto. Erro em 1.5 e 1.6, corrigidos |
+| 2 | `IReadOnlyList` é subconjunto | Sem. 2, Q6 | ✅ **fechada** — 2.4 e a conclusão do 2.5 certas. Modelo invertido, enfim, corrigido |
+| 3 | `static` é um por processo | Sem. 2, Q8 | ✅ **fechada, sem erro nenhum** — previu 5 de 6 e o "todas leem o mesmo valor", com o porquê certo |
+| 4 | "Quem está segurando referência?" | Sem. 2, Q12c | ✅ **fechada, 6 de 6.** 4.3, 4.4 e 4.6 no nível de uma revisão de código de verdade |
+| 5 | Acessibilidade | **Sem. 1, aberta desde 02/08** | ✅ **fechada** — 5.5 (o fragmento HTMX) acertada sozinha e com o mecanismo. 5.4 não respondida |
 
-O item 5 é o mais antigo e o que mais preocupa: `aria-invalid`/`aria-describedby` voltam na Semana 8, no fragmento que o HTMX devolve no blur do CNPJ. Se não fechar, a Semana 8 tropeça.
+**Placar das previsões: 17 de 21.** Os 4 erros, corrigidos em `PREVISOES.md`:
+
+| Item | Erro | O que faltava |
+|---|---|---|
+| 1.5 | "as **variáveis** precisaram ser alteradas" | `Ordenar` não mudou em nada. Mudou o **argumento**. É a definição de inversão de controle, e ele descreveu com a palavra que faria um colega editar o método |
+| 1.6 | previu que a linha **não** compila | compila nas duas formas. Conferido compilando: grupo de métodos converte implicitamente quando há tipo-alvo. `new Comparison<Nota>(...)` é ruído |
+| 2.3 | "`Count` herdado de `IEnumerable<T>`" | `Count` vem de `IReadOnlyCollection<T>`. E a resposta da pergunta era "está **nos dois**" |
+| 2.5 | garantia descrita como "não expor métodos que causem falha em runtime" | a garantia é do **tipo estático da referência**. O objeto continua `List<string>` — a demo mostrou a nota autorizada indo de 2 para 3 itens |
+
+### O que isso muda no diagnóstico
+
+**A Q6 finalmente fechou por dedução, não por confirmação.** Era a reprovação registrada em
+07/08 — e ele acertou 2.4 e a conclusão do 2.5 sem ter a resposta na mão.
+
+**O padrão que sobrou não é conceito, é frase.** Nos 4 erros, três eram a conclusão certa
+com a palavra errada — o mesmo defeito que a prova da Semana 2 exibiu cinco vezes. E o 5.4
+foi o caso puro: ele **repetiu o enunciado de volta** em vez de responder.
+
+> **Regra nova, comunicada a ele em 12/08:** resposta que reformula a pergunta conta como
+> não-resposta. É exatamente o que uma IA faz com confiança o tempo todo, e quem não sente
+> a diferença entre "explicou" e "reformulou" aprova isso numa revisão.
+
+**O que ele já faz bem:** 3.1 e 3.3 vieram com o raciocínio temporal correto (escritas em
+microssegundos, `Sleep` em milissegundos, última vence). Não foi chute.
 
 ---
 
@@ -210,19 +238,29 @@ Detalhe de cada uma em [`01-trilha-12-semanas.md`](01-trilha-12-semanas.md).
 | 07/08 | 02 | prova, 1ª passada (8 de 12) | ⚠️ 6 itens para refazer |
 | 07/08 | 02 | prova, 2ª passada (12 de 12) | ⚠️ 4 dos 6 resolvidos · Q6 seguia errada |
 | 07/08 | 02 | 2 perguntas de fechamento | ✅ **Ambas certas. Semana 02 fechada** — a (2) ele deduziu sozinho |
+| 12/08 | quitação | `PREVISOES.md` — 21 previsões | ✅ **17 de 21.** Dívidas 3 e 4 sem erro. Erros em 1.5, 1.6, 2.3, 2.5 — três deles "conclusão certa, palavra errada" |
+| 12/08 | quitação | `05-semana-01-acessibilidade.md` | ✅ **5 de 6.** 5.5 (fragmento HTMX) acertada sozinha. **5.4 não respondida** — repetiu o enunciado |
 
 ---
 
 ## Dívidas técnicas de aprendizado
 
-Coisas identificadas como fracas que precisam voltar mais adiante:
+Coisas identificadas como fracas que precisam voltar mais adiante.
 
-- **Acessibilidade** (`aria-*`, foco, navegação por teclado) — apareceu na Semana 1, reaparece nas Semanas 8 e 9. Não deixar acumular.
-- **Separação de responsabilidade em CSS** (espaçamento é do pai) — princípio, não regra de estilo.
-- **`IReadOnlyList<T>` é subconjunto de `List<T>`** (Semana 2, Q6) — **resolvido na 3ª passada, mas com a resposta na mão.** Foi o único que sobreviveu a duas passadas antes de eu explicar por extenso. É confirmação, não dedução. **Reprovar sem aviso**, com uma assinatura nova: *"este método devolve as notas rejeitadas para a tela montar a tabela — qual tipo de retorno, e por quê?"*. Se sair `IReadOnlyList` com justificativa, assentou.
-- **Inversão de controle** (Semana 2, Q11) — ele já nomeou `delegate` e mapeou para `reference to function`, mas não explicou **por que** um método aceita código como parâmetro. É o que falta para o LINQ não virar decoreba. Cobrar no **primeiro exercício da Semana 3**.
-- **`static` é um por processo, não global entre processos** (Semana 2, Q8) — uma palavra, mas é a **ponte para a Semana 10**: cache static diverge entre instâncias, e é a mesma família do Data Protection distribuído.
-- **Vazamento em .NET é "esqueci de SOLTAR", não "esqueci de LIBERAR"** (Semana 2, Q12c) — ele acertou que o GC troca a pergunta, mas só pegou a pergunta dos recursos do SO. Falta a segunda: *quem ainda está segurando referência?* Não há linha errada, há referência que sobra — precisa de profiler. **Reaparece na Semana 4** (escopo de DI) e na **Semana 7** (`DbContext`).
+### Fechadas em 12/08/2026 — bloco de quitação
+
+- ~~**`IReadOnlyList<T>` é subconjunto de `List<T>`**~~ (Sem. 2, Q6) — fechada. Ele acertou 2.4 e a conclusão do 2.5 **sem a resposta na mão**, o que era a condição. Resíduo cuidado: a escada `IEnumerable` → `IReadOnlyCollection` → `IReadOnlyList` ele errou (achava `Count` em `IEnumerable`); corrigida no arquivo.
+- ~~**Inversão de controle**~~ (Sem. 2, Q11) — fechada. As 4 ordenações certas, inclusive o critério composto que é o caso que quebra `IComparable`. **Ainda assim, cobrar no 1º exercício da Semana 3** com a formulação certa: em 1.5 ele disse "as variáveis precisaram ser alteradas". Se ele repetir isso diante de LINQ, o modelo não assentou.
+- ~~**`static` é um por processo**~~ (Sem. 2, Q8) — fechada, sem erro. Ponte para a Semana 10 mantida.
+- ~~**Vazamento é "esqueci de SOLTAR"**~~ (Sem. 2, Q12c) — fechada, 6 de 6, com o mecanismo. Reaparece como aplicação (não como dívida) na Semana 4 (escopo de DI) e na 7 (`DbContext`).
+- ~~**Acessibilidade** — parte conceitual~~ (Sem. 1) — fechada. Ele acertou sozinho o ponto que trava a Semana 8: fragmento HTMX substitui markup, então atributo ausente é atributo apagado.
+
+### Abertas
+
+- **Precisão de vocabulário — é a única dívida transversal que sobrou, e é a mais séria.** Padrão confirmado em três avaliações: prova da Semana 2 (5 ocorrências), previsões (3 dos 4 erros), acessibilidade (5.4). A conclusão chega certa, a frase não carrega a informação. **Regra em vigor desde 12/08:** resposta que reformula o enunciado conta como não-resposta. Aplicar em toda correção.
+- **Acessibilidade — parte de execução** — conceito fechado, mas ele nunca escreveu `aria-*` num fragmento gerado por servidor. **Agendada, com nome: Semana 8, exercício do blur do CNPJ.** Deve cobrir `role="alert"`/`aria-live` (que ele não mencionou) e `aria-invalid` como estado condicional, não atributo fixo.
+- **Separação de responsabilidade em CSS** (espaçamento é do pai) — princípio, não regra de estilo. Reaparece na Semana 6 (Partial Views / componentes).
+- **`static` com duas instâncias reais** — dívida de **experiência**, não de compreensão. Ele descreveu o mecanismo certo em 3.4 e 3.5 sem nunca ter visto. **Agendada: Semana 10**, Data Protection distribuído.
 
 ---
 
