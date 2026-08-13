@@ -3,7 +3,7 @@
 > **Este arquivo é o estado do estudo.** Cowork e Claude Code leem daqui antes de responder qualquer coisa, e escrevem aqui ao fim de cada sessão. Se este arquivo estiver desatualizado, as duas ferramentas dão conselho errado.
 
 **Aluno:** Diogo Marcel · **Início:** 26/07/2026 · **Ritmo alvo:** 10–15h/semana
-**Última atualização:** 12/08/2026
+**Última atualização:** 13/08/2026
 
 ---
 
@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Bloco ativo** | **Semana 03 — LINQ e async.** A montar |
+| **Bloco ativo** | **Semana 03 — LINQ e async.** ✅ material entregue em 13/08. Aguardando as previsões dele |
 | **Fase** | 1 — Fundação |
 | **Bloqueio** | Nenhum |
 | **Pendência aberta** | Nenhuma dívida de compreensão. **As 5 fecharam em 12/08** |
@@ -209,11 +209,62 @@ microssegundos, `Sleep` em milissegundos, última vence). Não foi chute.
 
 ---
 
-## Semanas 03–12 · ⬜ não iniciadas
+## Semana 03 — LINQ e async · 🔄 material entregue em 13/08/2026
+
+Primeira semana montada **inteira no formato novo**: a ferramenta constrói, ele prevê e
+julga. Nada para digitar.
+
+Dividida em **dois blocos auto-contidos**, porque LINQ e async são modelos mentais
+diferentes e a carga dele é variável. Cada bloco entrega valor sozinho.
+
+| # | Arquivo | Bloco | Quem faz |
+|---|---|---|---|
+| A1 | `teoria-01-linq.md` | LINQ | ele lê |
+| A2 | `Exercícios/PREVISOES.md` (seções 1–4) | LINQ | **ele escreve, antes de rodar** |
+| A3 | `dotnet run -- linq` | LINQ | máquina roda, ele compara |
+| B1 | `teoria-02-async.md` | async | ele lê |
+| B2 | `Exercícios/PREVISOES.md` (seções 5–6) | async | **ele escreve, antes de rodar** |
+| B3 | `dotnet run -- async` | async | máquina roda, ele compara |
+| C1 | `Exercícios/exigir-ou-recusar.md` | — | ele responde |
+| C2 | `Exercícios/prova-semana-03.md` — 12 questões | — | ele responde |
+
+**Código:** `demos/Semana03.Console/` — 6 demos, compila com **0 avisos**, rodadas e com a
+saída conferida antes de publicar.
+
+| Demo | O que demonstra |
+|---|---|
+| 1 | O mesmo relatório em laço e em LINQ, resultado idêntico. LINQ apresentado como a **dívida 1 com nomes prontos** — a ponte explícita |
+| 2 | **Execução adiada**, com contador de avaliações: 0 → 12 → 24 → 12 (ToList) → 1 (First). Fonte que muda depois da consulta escrita. É o susto do bloco |
+| 3 | `GroupBy` fiscal · `Max`/`Average` estourando com sequência vazia · matriz `First`/`Single` |
+| 4 | **5 bugs plantados** que compilam, rodam e mentem: arredondar total em vez de item (−R$ 1,00 em 200 itens), `GroupBy` por razão social, `Take` antes do `Where`, acumulador em `double`, `Math.Round` bancário |
+| 5 | Vazão medida: 64 requisições, pool estrangulado. Bloqueante 2075 ms / pico de 8 esperas simultâneas · async 266 ms / pico de 64 |
+| 6 | 4 armadilhas: `async void` (com `SynchronizationContext` instrumentado para mostrar **para onde** a exceção vai), `.Result` → `AggregateException`, `async` sem `await`, fire-and-forget |
+
+### Decisões de conteúdo desta semana
+
+- **`.Result` em ASP.NET Core não causa deadlock.** Causa inanição de threads. A demo 6
+  trata isso como "a mentira a recusar" — a conclusão que a IA dá está certa, o mecanismo
+  está errado, e o mecanismo errado manda depurar no lugar errado. É um dos poucos temas em
+  que ele vai ter que corrigir a ferramenta.
+- **`exigir-ou-recusar.md` estreia o 4º pilar** (definido em 07/08, nunca aplicado). Duas
+  rodadas separadas de propósito: o que exigir **antes** de ver código, e o que recusar
+  **depois**. A métrica final é quantos defeitos ele previu sem a pista.
+- **Bugs plantados são erros de DOMÍNIO expressos em LINQ**, não erros de LINQ. Nenhum é
+  pegável por compilador, analisador ou teste escrito pela mesma IA. É exatamente a barra
+  registrada em 07/08.
+- **Fora do escopo, de propósito:** `IAsyncEnumerable`, `ConfigureAwait`, `ValueTask`, e
+  sintaxe de consulta (`from x in y select`). A última só divide atenção.
+
+**Cobrança agendada nesta semana:** a Q1 da prova e o 1.4 das previsões cobram inversão de
+controle **com formulação nova**. No 1.5 do bloco de quitação ele disse "as variáveis
+precisaram ser alteradas". Se repetir isso diante de LINQ, o modelo não assentou.
+
+---
+
+## Semanas 04–12 · ⬜ não iniciadas
 
 | Semana | Tema | Fase |
 |---|---|---|
-| 03 | C# parte 2 — LINQ e async | 1 |
 | 04 | ASP.NET Core — pipeline, DI, config · **checkpoint** | 1 |
 | 05 | Razor Pages — páginas, handlers, binding | 2 |
 | 06 | Tag Helpers, Partial Views, View Components | 2 |
@@ -250,7 +301,7 @@ Coisas identificadas como fracas que precisam voltar mais adiante.
 ### Fechadas em 12/08/2026 — bloco de quitação
 
 - ~~**`IReadOnlyList<T>` é subconjunto de `List<T>`**~~ (Sem. 2, Q6) — fechada. Ele acertou 2.4 e a conclusão do 2.5 **sem a resposta na mão**, o que era a condição. Resíduo cuidado: a escada `IEnumerable` → `IReadOnlyCollection` → `IReadOnlyList` ele errou (achava `Count` em `IEnumerable`); corrigida no arquivo.
-- ~~**Inversão de controle**~~ (Sem. 2, Q11) — fechada. As 4 ordenações certas, inclusive o critério composto que é o caso que quebra `IComparable`. **Ainda assim, cobrar no 1º exercício da Semana 3** com a formulação certa: em 1.5 ele disse "as variáveis precisaram ser alteradas". Se ele repetir isso diante de LINQ, o modelo não assentou.
+- ~~**Inversão de controle**~~ (Sem. 2, Q11) — fechada. As 4 ordenações certas, inclusive o critério composto que é o caso que quebra `IComparable`. **Cobrança agendada e já escrita:** previsão 1.4 e Q1 da prova da Semana 3, com formulação nova. Em 1.5 ele disse "as variáveis precisaram ser alteradas"; se repetir isso diante de LINQ, o modelo não assentou.
 - ~~**`static` é um por processo**~~ (Sem. 2, Q8) — fechada, sem erro. Ponte para a Semana 10 mantida.
 - ~~**Vazamento é "esqueci de SOLTAR"**~~ (Sem. 2, Q12c) — fechada, 6 de 6, com o mecanismo. Reaparece como aplicação (não como dívida) na Semana 4 (escopo de DI) e na 7 (`DbContext`).
 - ~~**Acessibilidade** — parte conceitual~~ (Sem. 1) — fechada. Ele acertou sozinho o ponto que trava a Semana 8: fragmento HTMX substitui markup, então atributo ausente é atributo apagado.
