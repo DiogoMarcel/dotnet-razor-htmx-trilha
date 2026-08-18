@@ -12,6 +12,24 @@ saído achando que sabia as quatro.
 **Regra em vigor desde 12/08:** resposta que reformula o enunciado conta como não-resposta.
 Se a sua frase não permitiria a outra pessoa implementar a coisa, ela não está pronta.
 
+## Como conferir
+
+Cada demo termina com um bloco **`GABARITO DA DEMO N`**, na numeração desta folha. Você lê
+de cima para baixo e marca certo/errado sem ter que caçar a resposta no meio da narração.
+
+```powershell
+dotnet run -- 3          # roda a demo 3 e imprime o gabarito 3.1 a 3.6
+```
+
+Os números do gabarito são **recalculados**, não copiados: se eu mexer na massa ou num
+filtro, ele acompanha. Gabarito que mente é pior que gabarito nenhum.
+
+Os itens conceituais (1.4, 3.4, 5.2, 6.5) trazem resposta **de referência**, curta de
+propósito — ela diz o que é certo; o porquê está na narração da demo, logo acima. Se a sua
+resposta chegou no mesmo lugar com outras palavras, **não marque como erro na hora**: traga
+para eu julgar. Palavra diferente pode ser sinônimo ou pode ser modelo diferente, e essa
+distinção é exatamente o que você ainda não faz sozinho.
+
 ---
 
 # BLOCO A — LINQ (`dotnet run -- linq`)
@@ -35,13 +53,22 @@ A massa, na ordem de criação:
 | 1011 | 78901234000156 | Comercial Damasco | SP | 19/07 | 95,90 | Cancelada |
 | 1012 | 78901234000156 | Comercial Damasco | GO | 30/07 | 8.420,00 | Autorizada |
 
-**1.1** Notas **autorizadas de julho/2026**, da maior para a menor. Escreva os números na ordem.
+**1.1** Notas **autorizadas de julho/2026**, ordenadas **por valor, do maior para o menor**.
+Escreva os **números das notas** na ordem em que saem.
 
-> resposta:
+> resposta anterior (enunciado ambíguo, corrigido em 13/08): 1012, 1010, 1009, 1007, 1005, 1004, 1002, 1001
+>
+> resposta: 1010, 1004, 1012, 1005, 1009, 1007, 1001, 1002
+
+> **Nota da correção.** O enunciado dizia só "da maior para a menor", sem dizer maior o quê.
+> Você ordenou por número da nota — leitura legítima do que estava escrito, e defeito meu.
+> **O conjunto você acertou:** as 8 são exatamente essas, com 1003 e 1011 fora por canceladas,
+> 1008 por em digitação, e 1006 por ser de agosto. Essa era a parte que a pergunta media.
+> Refaça só a ordem.
 
 **1.2** O total dessas notas.
 
-> resposta:
+> resposta: 53.295,75  ✅ confere com a saída da demo
 
 **1.3** `Func<NotaFiscal, decimal>` — o que ele recebe e o que devolve? E `Action<NotaFiscal>`?
 
@@ -56,7 +83,14 @@ Comparison<T>)` do bloco de quitação? Responda em uma frase que **não** use a
 
 ## Demo 2 — execução adiada
 
-Um contador sobe a cada avaliação da lambda do `Where`. A massa tem **12** notas.
+A consulta é sempre a mesma:
+
+```csharp
+notas.Where(n => n.Situacao == SituacaoNota.Autorizada)
+```
+
+O filtro está instrumentado: **cada vez que a lambda é avaliada, um contador sobe.** A massa
+tem **12** notas, na ordem da tabela acima.
 
 **2.1** `var q = notas.Where(...);` e mais nada. Contador?
 
@@ -140,6 +174,11 @@ Abra [`../demos/Semana03.Console/Demos/Demo4BugsPlantados.cs`](../demos/Semana03
 e leia **só** os blocos marcados `// ERRADO`. Para cada um: o que está errado, e qual a
 consequência **em reais ou em fato fiscal**.
 
+> Esta demo usa uma massa **ampliada**: as 12 da tabela acima mais duas, e as duas existem
+> só para os bugs 2 e 3 morderem. A NF **2001** é uma filial — mesma razão social do
+> `11222333000181`, CNPJ `11222333000272`. A NF **2002** é uma cancelada de valor alto. Não
+> se assuste ao vê-las no arquivo; não estão na tabela porque não pertencem às demos 1 a 3.
+
 **4.1** Bug 1 — ICMS de 18% sobre uma nota de 200 itens.
 
 > o que está errado:
@@ -192,12 +231,19 @@ erro mais comum sobre async.
 > resposta:
 
 **5.3** 64 requisições, 250 ms de I/O cada, pool estrangulado em 2 threads mínimas.
-Quanto leva cada versão, e qual o **pico de esperas simultâneas** de cada uma?
 
-| | tempo | pico de esperas simultâneas |
+O tempo depende da máquina — para ele, **ordem de grandeza basta** (250 ms? 1 s? 10 s?).
+O **pico de esperas simultâneas** não depende: é consequência do mecanismo, e é o número
+que a pergunta realmente cobra.
+
+| | tempo (ordem de grandeza) | pico de esperas simultâneas |
 |---|---|---|
 | `Thread.Sleep` (bloqueante) | | |
 | `await Task.Delay` | | |
+
+E depois, em uma frase: **por que** o pico de uma é o que é, e o da outra é 64?
+
+> resposta:
 
 **5.4** `async` cria thread? Justifique.
 

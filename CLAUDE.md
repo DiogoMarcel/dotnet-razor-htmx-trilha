@@ -129,6 +129,51 @@ previsão escrita, não existe susto, e sem susto o conceito não assenta — fo
 a correção da Semana 2 demonstrou (ele consolidou os conceitos em que voltou com o mecanismo
 na mão; não consolidou nada na primeira leitura).
 
+### Toda demo imprime gabarito numerado (13/08/2026)
+
+**Toda demo termina com um bloco `GABARITO DA DEMO N`, na mesma numeração da folha de
+previsões.** Sem isso ele não consegue conferir item a item: as demos mostram tudo, mas
+"mostrar" espalhado na narração não é o mesmo que responder a questão 3.4.
+
+Pedido dele em 13/08, e o diagnóstico era certo — na Semana 3 original, o item 4.6 não era
+respondido em lugar nenhum e o 3.1 nunca dizia o número.
+
+Duas regras que fazem o gabarito valer alguma coisa:
+
+- **Recalcular, nunca copiar.** Todo número que sai da massa é computado no gabarito com a
+  mesma consulta da demo. Gabarito que deriva da massa é pior que gabarito nenhum.
+- **Item conceitual leva resposta de referência curta**, e a folha avisa: se a resposta dele
+  chegou no mesmo lugar com outras palavras, ele **não** marca erro sozinho — traz para
+  julgar. Palavra diferente pode ser sinônimo ou modelo diferente, e separar as duas coisas
+  é justamente o que ele ainda não faz.
+
+Modelo pronto em `semana-03/demos/Semana03.Console/Demos/Gabarito.cs`.
+
+### Regra de correção: o enunciado responde primeiro (13/08/2026)
+
+**Antes de marcar qualquer resposta como errada, verifique se o enunciado permitia a
+resposta certa.** Se não permitia, o defeito é do enunciado, a questão não conta, e quem
+corrige o material é a ferramenta.
+
+Veio de um caso concreto. A previsão 1.1 da Semana 3 pedia as notas *"da maior para a
+menor"* sem dizer **maior o quê**; ele ordenou por número da nota, a demo ordenava por
+valor. O conjunto das 8 notas ele acertou, com as quatro exclusões certas — fez o trabalho
+difícil e errou o critério que o enunciado não trazia. **Isso é lacuna de especificação,
+não de conhecimento.** Ele reclamou, e estava certo.
+
+A regra existe porque a assimetria é feia e desmoraliza a cobrança: exigir precisão de
+vocabulário dele com enunciado impreciso meu. As duas coisas não se anulam, mas a ordem é
+esta e não a inversa.
+
+**O que NÃO muda:** quando o enunciado deu tudo, "conclusão certa com a palavra errada"
+segue cobrável. A diferença é objetiva — pergunte se outra pessoa, lendo só o enunciado,
+teria como chegar na resposta esperada. Se sim, a cobrança vale. Se não, conserte o
+material e refaça a pergunta.
+
+**Corolário:** ele achar defeito no material é o exercício funcionando, não atrito. Já
+aconteceu três vezes — ES a 7% na Semana 2, e agora 1.1 e 2.5 da Semana 3. Registre o
+defeito e corrija; não relativize.
+
 ### Regra de dívida (definida por ele em 07/08/2026)
 
 **Dívida de compreensão não passa de bloco.** Se ele não entende o mecanismo, fecha antes de

@@ -60,6 +60,7 @@ foreach (var demo in demos)
     Console.WriteLine();
 
     demo.Executar();
+    Gabarito.Imprimir(demo.Numero);
     Console.WriteLine();
 }
 

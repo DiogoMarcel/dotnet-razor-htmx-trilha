@@ -40,6 +40,11 @@ dotnet run -- 4         # uma específica
 Compila com **0 avisos**. As 6 demos são comentadas linha a linha — o código é material
 didático, não exercício de digitação.
 
+Cada demo termina com um bloco **`GABARITO DA DEMO N`**, na mesma numeração do
+[`PREVISOES.md`](Exercícios/PREVISOES.md). Serve para conferir item a item sem caçar a
+resposta no meio da narração. Os números são **recalculados** a cada execução, não copiados —
+se a massa mudar, o gabarito acompanha.
+
 ---
 
 ## As demos
