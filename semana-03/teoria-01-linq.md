@@ -60,7 +60,10 @@ Três consequências, e as três mordem em produção:
 A (3) é a que estraga número fiscal em silêncio: o rodapé do relatório não bate com a soma
 das linhas, porque as linhas foram enumeradas num instante e o total noutro.
 
-### A régua — olhe o tipo de retorno
+### O teste rápido — olhe o tipo de retorno
+
+("Régua" é como eu chamo isso no resto do material: uma regra curta que classifica qualquer
+caso, inclusive um operador que você nunca viu.)
 
 | Devolve `IEnumerable<T>` → **ADIA** | Devolve valor ou coleção → **EXECUTA** |
 |---|---|

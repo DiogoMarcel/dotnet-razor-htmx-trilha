@@ -72,12 +72,27 @@ Escreva os **números das notas** na ordem em que saem.
 
 **1.3** `Func<NotaFiscal, decimal>` — o que ele recebe e o que devolve? E `Action<NotaFiscal>`?
 
-> resposta:
+> resposta: para eu fixar anotei desta forma: FUNC<o_que_recebe,ultimo_retorno>, portanto recebe uma NotaFiscal e devolve o decimal.
+>           já o Action<Apenas_recebe>, não há retornos.
 
 **1.4** Sem rodar: qual a relação entre `Where(Func<T, bool>)` e o `Ordenar(List<T>,
 Comparison<T>)` do bloco de quitação? Responda em uma frase que **não** use a palavra "lambda".
 
-> resposta:
+> resposta: ambos usam delegate como parametros. where apenas filtra valores, ordenar altera o resultado conforme o critério. Alterar neste caso é ajustar a ordem com um critério conforme foi informado.
+> resposta adicional: ambos utilizam a mesma mecânica de inversão de controle, o método implementa a ação fixa, depois recebe a variável passado por valor.
+
+**1.4.1** Where e Ordenar fazem coisas diferentes — e fazem. Então por que os dois precisam receber código de fora? O que há de igual no problema que os dois resolvem?
+
+> resposta: ambos tem a mesma questão/problema estrutural, precisam separar o mecanismo da biblioteca, que é escrito uma única vez e não varia, da regra específica que varia.
+
+**1.4.2** Complete: "Ordenar implementa ______ e recebe de fora ______." Depois a mesma frase para Where.
+
+> resposta: Ordenar implementa o que não varia e recebe de fora critério valor. < aqui percorre e troca
+> resposta: Where implementa percorrer e recebe de fora critério variável. < aqui percorre e deixa passar
+
+**1.4.3** O teste de verdade: Sum(n => n.Valor) também recebe delegate. O que Sum implementa, e o que você fornece? Se a sua resposta às três tiver a mesma forma, o modelo está lá.
+
+> resposta: O sum percorre e soma. Preciso fornecer um delegate FUNC<T, decimal>. É a mesma forma de modelo, com laço fixo que recebe o comportamento variável que é a regra.
 
 ---
 
@@ -94,34 +109,107 @@ tem **12** notas, na ordem da tabela acima.
 
 **2.1** `var q = notas.Where(...);` e mais nada. Contador?
 
-> resposta:
+> resposta: 0
 
 **2.2** Depois de **um** `foreach` sobre `q`. Contador?
 
-> resposta:
+> resposta: 12
 
 **2.3** Depois de um **segundo** `foreach` sobre a **mesma** variável `q`. Contador?
 
-> resposta:
+> resposta: 24
 
 **2.4** `notas.Where(...).ToList()` e depois **dois** `foreach` sobre a lista. Contador?
 
-> resposta:
+> resposta: 12
 
 **2.5** `notas.Where(...).First()`. Contador?
 
-> resposta, e por quê:
+> resposta, e por quê: 1. A rotina FIRST ao encontrar o primeiro registro da massa ele para e não avalia as demais.
+
+**2.5.1** Se a NF 1001 fosse Cancelada, qual seria o contador?
+
+> resposta: Continuaria 1.
+
+> **Enunciado ambíguo, corrigido em 13/08.** Não dizia *quando* a 1001 seria cancelada.
+> Você leu como "cancelar depois de rodar o First" — leitura legítima, ainda mais vindo
+> logo depois do 2.6. E sob essa leitura a sua resposta está **certa**, pelo motivo certo:
+> `First` executa na hora e devolve valor concreto, então mudar a fonte depois não altera
+> nem o contador nem o resultado. Refeita abaixo.
+
+**2.5.2** Massa **diferente**, mesma consulta. Imagine que a NF 1001 já nasceu **Cancelada**
+— as outras 11 permanecem exatamente como na tabela. Roda-se, nessa massa:
+
+```csharp
+notas.Where(n => n.Situacao == SituacaoNota.Autorizada).First()
+```
+
+Qual o valor do contador, e qual nota é devolvida?
+
+> resposta: o contador retorna 2, pois first é o executor do where, que irá falhar na primeira consulta da nota, somando 1 no contador, o where executa novamente para validar a segunda nota e incrementa o contador. A nota retornada será a 1002.
 
 **2.6** A consulta `notas.Where(n => n.Valor > 10_000m)` é escrita. **Depois** disso alguém
 faz `notas.Add(...)` de uma nota de 99.000,00. A nota nova aparece no resultado?
 E se a consulta tivesse `.ToList()` no fim?
 
-> resposta:
+> resposta: a consulta adiada a nova nota irá aparecer. Em .ToList() não, a lista de notas foi fixada ao executar o ToList() antes de adicionar a nova nota.
 
-**2.7** Complete a régua, sem consultar: como você olha para uma linha de LINQ e sabe se ela
-**já executou** ou **ainda não**?
+**2.7** Sem consultar e sem rodar nada: você está revisando um código e precisa saber, de
+cada linha abaixo, se ela **já executou a consulta** ou se ela **só montou a pergunta e não
+rodou nada ainda**.
+
+```csharp
+notas.Where(n => n.Valor > 1_000m)         // (a)
+notas.OrderByDescending(n => n.Valor)      // (b)
+notas.GroupBy(n => n.Cnpj)                 // (c)
+notas.Count()                              // (d)
+notas.Any(n => n.Valor > 10_000m)          // (e)
+notas.Where(n => ...).ToList()             // (f)
+```
+
+**a)** Classifique as seis.
 
 > resposta:
+ (a) adiado
+ (b) adiado
+ (c) adiado
+ (d) executou
+ (e) executou
+ (f) executou
+
+
+**b)** Agora escreva **a regra geral** que você usou — uma frase que classifique qualquer
+operador de LINQ, inclusive um que você nunca viu. Diga **o que você olha** na linha e **o
+que nesse lugar** separa os dois casos.
+
+> resposta: não entendi a questão.
+
+**b.1) — refeita em 13/08, com o dado na mesa.** Você acertou as seis de (a). Esta é a tabela
+do que cada um desses métodos **declara devolver**:
+
+| | linha | o método devolve |
+|---|---|---|
+| (a) | `Where(...)` | `IEnumerable<NotaFiscal>` |
+| (b) | `OrderByDescending(...)` | `IOrderedEnumerable<NotaFiscal>` |
+| (c) | `GroupBy(...)` | `IEnumerable<IGrouping<string, NotaFiscal>>` |
+| (d) | `Count()` | `int` |
+| (e) | `Any(...)` | `bool` |
+| (f) | `ToList()` | `List<NotaFiscal>` |
+
+Olhando **só a coluna da direita**: o que as três de cima têm que as três de baixo não têm?
+
+Responda em uma frase, e ela é a regra. Depois teste nestes dois, que não estão na tabela:
+
+```csharp
+notas.Take(5)                       // devolve IEnumerable<NotaFiscal>
+notas.ToDictionary(n => n.Numero)   // devolve Dictionary<int, NotaFiscal>
+```
+
+> resposta: as 3 acima retornam a interface. as 3 abaixo retornam o valor concreto.
+take irá executar adiado
+todictionary irá executar imediatamente.
+
+> resposta: sem executar avaliando apenas o código é possível identificar o tipo do retorno. Se é notas.Where(Contando) é adiado. Se for notas.Where(Contando).ToList() - materializado.
 
 ---
 

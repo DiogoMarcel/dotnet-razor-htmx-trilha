@@ -11,7 +11,7 @@
 
 | | |
 |---|---|
-| **Bloco ativo** | **Semana 03 — LINQ e async.** ✅ material entregue em 13/08. Aguardando as previsões dele |
+| **Bloco ativo** | **Semana 03 — LINQ e async.** Demos 1 e 2 fechadas em 13/08. Retoma na demo 3 |
 | **Fase** | 1 — Fundação |
 | **Bloqueio** | Nenhum |
 | **Pendência aberta** | Nenhuma dívida de compreensão. **As 5 fecharam em 12/08** |
@@ -258,6 +258,65 @@ saída conferida antes de publicar.
 **Cobrança agendada nesta semana:** a Q1 da prova e o 1.4 das previsões cobram inversão de
 controle **com formulação nova**. No 1.5 do bloco de quitação ele disse "as variáveis
 precisaram ser alteradas". Se repetir isso diante de LINQ, o modelo não assentou.
+
+### Sessão de 13/08 — demos 1 e 2 respondidas e corrigidas
+
+Ele respondeu, eu conferi item a item contra a saída real, e ele parou na demo 3 para
+continuar amanhã.
+
+| | Resultado |
+|---|---|
+| **Demo 1** | ✅ fechada. 1.1 · 1.2 · 1.3 · 1.4 |
+| **Demo 2** | ✅ fechada. 2.1–2.7, com 2.5.2 e 2.7b refeitos |
+| **Demo 3–6** | ⬜ amanhã |
+
+**O que ele fechou de verdade nesta sessão:**
+
+- **Inversão de controle, agora por dedução.** No 1.4.3 ele aplicou a forma a `Sum`, um
+  método que não estava no enunciado: *"percorre e soma, eu forneço `Func<T, decimal>`,
+  laço fixo que recebe o comportamento variável"*. Era a condição registrada em 07/08. **A
+  dívida 1 pode ser considerada consolidada** — não é mais confirmação.
+- **Modelo de puxar (pull), no 2.5.2.** Foi o único ponto em que ele realmente travou, e
+  travou porque tinha escrito *"First para no primeiro registro da massa"* — frase que dá o
+  número certo na massa original **por coincidência**. Com a 1001 Cancelada ele previu
+  contador 1, depois 0, e só fechou quando eu abri o rastro passo a passo. Aprendeu que
+  "adiado" não é "nunca roda", é "roda quando alguém puxa, e só o quanto foi puxado".
+  Paralelo que funcionou: `TDataSet` com fetch sob demanda.
+- **A régua adia/executa, no 2.7.** *"As três de cima retornam a interface, as três de
+  baixo retornam o valor concreto"* — e aplicou a dois operadores novos (`Take`,
+  `ToDictionary`). Ponte para a Semana 7 registrada: `IQueryable<T>` é interface, logo
+  adiado.
+
+**O padrão da dívida de vocabulário, agora com contagem.** Quatro vezes nesta sessão o
+conteúdo certo estava no arquivo e fora da resposta à pergunta feita: 1.4 (a versão precisa
+virou "resposta adicional"), 1.4.2 (o específico foi para a margem depois de um `<`), 2.7
+primeira versão (o critério preso ao `GetType()`), 2.7 segunda versão (o critério trocado
+por dois exemplos).
+
+> **Formulação que funcionou com ele, e vale repetir:** *"quando você sentir vontade de
+> anexar um esclarecimento, o esclarecimento era a resposta."*
+
+### Quatro defeitos de enunciado meus, achados por ele em uma sessão
+
+Todos corrigidos no arquivo. Registrados porque a regra de 13/08 manda registrar, não
+relativizar.
+
+| Item | Defeito | Como ficou |
+|---|---|---|
+| 1.1 | "da maior para a menor" sem dizer maior o quê | agora diz "por valor" |
+| 2.5 | o filtro do contador nunca era mostrado | a consulta está no cabeçalho da demo 2 |
+| 2.7 | usava "régua", palavra minha, e mandava responder "sem consultar" — a definição só existia no arquivo que ele não podia abrir | reescrita sem jargão, com 6 linhas para classificar e a tabela de tipos de retorno |
+| 2.5.1 | "se a NF 1001 fosse Cancelada" sem dizer **quando** | refeita como 2.5.2, com a massa alternativa explícita |
+
+Ele reclamou de rigor assimétrico na 2.7 e **estava certo**: eu cobrei três vezes em cima de
+uma palavra que só eu conhecia. Daí a regra nova no `CLAUDE.md` — *o enunciado responde
+primeiro*.
+
+**Também nasceu daqui o gabarito numerado** (`Demos/Gabarito.cs`): ele perguntou se dava para
+conferir item a item, e não dava. O 4.6 não era respondido em lugar nenhum e o 3.1 nunca
+dizia o número. Agora toda demo imprime `GABARITO DA DEMO N`, e virou padrão da trilha.
+
+**Para a próxima sessão:** ele começa na demo 3. Nada bloqueado.
 
 ---
 
